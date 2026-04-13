@@ -43,7 +43,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: app
-          path: .
+          path: ./publish
 
       - name: Deploy
         uses: azure/webapps-deploy@v3
@@ -51,4 +51,4 @@ jobs:
           app-name: 'app-mesa-inventarios-api-prod'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7D5A8EA7DFDF4D36AF831E5A7C22456B }}
-          package: ./app
+          package: ./publish
