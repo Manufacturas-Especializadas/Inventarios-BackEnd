@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup .NET
@@ -25,18 +25,8 @@ jobs:
       - name: Build
         run: dotnet build ./API/API.csproj -c Release --no-restore
 
-      - name: Clean publish folder
-        run: rm -rf ./publish
-
       - name: Publish
         run: dotnet publish ./API/API.csproj -c Release -o ./publish --no-build
-        
-      - name: Debug publish output
-        run: |
-          echo "===== FILES ====="
-          ls -la ./publish
-          echo "===== RUNTIMES ====="
-          ls ./publish/*.runtimeconfig.json || true
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -53,12 +43,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: app
-          path: ./publish
+          path: .
 
-      - name: Deploy to Azure Web App
+      - name: Deploy
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'app-mesa-inventarios-api-prod'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7D5A8EA7DFDF4D36AF831E5A7C22456B }}
-          package: ./publish
+          package: ./app
