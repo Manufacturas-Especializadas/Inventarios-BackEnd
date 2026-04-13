@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup .NET
@@ -30,12 +30,12 @@ jobs:
 
       - name: Publish
         run: dotnet publish ./API/API.csproj -c Release -o ./publish --no-build
-
+        
       - name: Debug publish output
         run: |
-          echo "==== FILES ===="
+          echo "===== FILES ====="
           ls -la ./publish
-          echo "==== RUNTIMES ===="
+          echo "===== RUNTIMES ====="
           ls ./publish/*.runtimeconfig.json || true
 
       - name: Upload artifact
@@ -55,26 +55,10 @@ jobs:
           name: app
           path: ./publish
 
-      - name: Deploy to Azure
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'app-mesa-inventarios-api-prod'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7D5A8EA7DFDF4D36AF831E5A7C22456B }}
           package: ./publish
-
-      - name: Set startup command
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: 'app-mesa-inventarios-api-prod'
-          app-settings-json: |
-            [
-              {
-                "name": "WEBSITES_PORT",
-                "value": "8080"
-              },
-              {
-                "name": "WEBSITE_RUN_FROM_PACKAGE",
-                "value": "1"
-              }
-            ]
