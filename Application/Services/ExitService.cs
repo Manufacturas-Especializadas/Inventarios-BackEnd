@@ -29,7 +29,6 @@ namespace Application.Services
                 ShopOrder4 = dto.ShopOrder4,
                 ShopOrder5 = dto.ShopOrder5,
                 ShopOrder6 = dto.ShopOrder6,
-                CreatedAt = DateTime.Now,
                 Details = dto.Details.Select(d => new ExitDetail
                 {
                     PartNumber = d.PartNumber,

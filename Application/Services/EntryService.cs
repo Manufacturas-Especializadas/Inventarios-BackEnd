@@ -18,7 +18,6 @@ namespace Application.Services
             var entry = new EntryHeader
             {
                 LineId = dto.LineId,
-                CreatedAt = DateTime.Now,
                 Details = dto.Details.Select(d => new EntryDetail
                 {
                     PartNumber = d.PartNumber,
