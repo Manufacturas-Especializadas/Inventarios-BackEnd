@@ -19,14 +19,30 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Clean solution
+        run: dotnet clean
+
+      - name: Delete bin and obj
+        run: |
+          find . -type d -name "bin" -exec rm -rf {} +
+          find . -type d -name "obj" -exec rm -rf {} +
+
       - name: Restore
         run: dotnet restore ./API/API.csproj
 
       - name: Build
         run: dotnet build ./API/API.csproj -c Release --no-restore
 
+      - name: Clean publish folder
+        run: rm -rf ./publish
+
       - name: Publish
         run: dotnet publish ./API/API.csproj -c Release -o ./publish --no-build
+        
+      - name: Verify runtime files
+        run: |
+          echo "==== runtimeconfig ===="
+          ls ./publish/*.runtimeconfig.json || true
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
