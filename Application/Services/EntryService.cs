@@ -15,9 +15,14 @@ namespace Application.Services
 
         public async Task<int> RegisterEntryAsync(EntryCreateDto dto)
         {
+            TimeZoneInfo mexicoTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+
+            DateTime nowInMexico = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mexicoTimeZone);
+
             var entry = new EntryHeader
             {
                 LineId = dto.LineId,
+                CreatedAt = nowInMexico,
                 Details = dto.Details.Select(d => new EntryDetail
                 {
                     PartNumber = d.PartNumber,

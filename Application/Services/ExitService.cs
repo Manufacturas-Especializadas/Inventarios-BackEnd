@@ -20,6 +20,10 @@ namespace Application.Services
 
         public async Task<int> RegisterExitAsync(ExitCreateDto dto)
         {
+            TimeZoneInfo mexicoTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+
+            DateTime nowInMexico = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mexicoTimeZone);
+
             var exit = new ExitHeader
             {
                 LineId = dto.LineId,
@@ -29,6 +33,7 @@ namespace Application.Services
                 ShopOrder4 = dto.ShopOrder4,
                 ShopOrder5 = dto.ShopOrder5,
                 ShopOrder6 = dto.ShopOrder6,
+                CreatedAt = nowInMexico,
                 Details = dto.Details.Select(d => new ExitDetail
                 {
                     PartNumber = d.PartNumber,
