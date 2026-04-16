@@ -27,6 +27,47 @@ namespace Infrastructure.Repositories
             return exit.Id;
         }
 
+        public async Task<bool> UpdateExitAsync(ExitHeader exit)
+        {
+            var existingExit = await _context.ExitHeaders
+                        .Include(e => e.Details)
+                        .FirstOrDefaultAsync(e => e.Id == exit.Id);
+
+            if (existingExit == null) return false;
+
+            existingExit.ShopOrder1 = exit.ShopOrder1;
+            existingExit.ShopOrder2 = exit.ShopOrder2;
+            existingExit.ShopOrder3 = exit.ShopOrder3;
+            existingExit.ShopOrder4 = exit.ShopOrder4;
+            existingExit.ShopOrder5 = exit.ShopOrder5;
+
+            _context.ExitDetails.RemoveRange(existingExit.Details);
+            existingExit.Details = exit.Details;
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteExitAsync(int id)
+        {
+            var exit = await _context.ExitHeaders.FindAsync(id);
+
+            if(exit == null) return false;
+
+            _context.ExitHeaders.Remove(exit);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<ExitHeader?> GetExitByIdAsync(int id)
+        {
+            return await _context.ExitHeaders
+                    .Include(e => e.Details)
+                    .FirstOrDefaultAsync(e => e.Id == id);
+        }
+
         public async Task<int?> GetStockByPartNumberAsync(string partNumber, int lineId)
         {
             bool hasEntries = await _context.EntryDetails
