@@ -14,5 +14,9 @@ namespace Domain.Interfaces
         Task<EntryHeader> GeEntryByIdAsync(int id);
 
         Task<bool> UpdateEntryAsync(EntryHeader entry);
+
+        Task<bool> DeleteEntryAsync(int id);
+
+        Task<IEnumerable<EntryHeader>> GetEntriesHistoryByLineAsync(int lineId);
     }
 }
