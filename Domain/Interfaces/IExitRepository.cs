@@ -13,5 +13,7 @@ namespace Domain.Interfaces
         Task<bool> UpdateExitAsync(ExitHeader exit);
 
         Task<bool> DeleteExitAsync(int id);
+
+        Task<IEnumerable<ExitHeader>> GetExitsHistoryByLineAsync(int lineId);
     }
 }
