@@ -10,5 +10,7 @@ namespace Domain.Interfaces
     public interface IEntryRepository
     {
         Task<int> CreateEntryAsync(EntryHeader entry);
+
+        Task<EntryHeader> GeEntryByIdAsync(int id);
     }
 }
