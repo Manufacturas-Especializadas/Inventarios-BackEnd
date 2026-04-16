@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
                     .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<IEnumerable<EntryHeader>> GetEntriesHistoryByLineAsyn(int lineId)
+        public async Task<IEnumerable<EntryHeader>> GetEntriesHistoryByLineAsync(int lineId)
         {
             return await _context.EntryHeaders
                     .Include(e => e.Details)
