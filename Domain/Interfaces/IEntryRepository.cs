@@ -12,5 +12,7 @@ namespace Domain.Interfaces
         Task<int> CreateEntryAsync(EntryHeader entry);
 
         Task<EntryHeader> GeEntryByIdAsync(int id);
+
+        Task<bool> UpdateEntryAsync(EntryHeader entry);
     }
 }
