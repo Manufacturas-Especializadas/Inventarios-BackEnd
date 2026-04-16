@@ -51,41 +51,51 @@ namespace API.Controllers
         [Route("CreateExit")]
         public async Task<IActionResult> Create(ExitCreateDto dto)
         {
-            var id = await _exitService.RegisterExitAsync(dto);
-
-            return Ok(new
+            try
             {
-                message = "Salida registrada",
-                id = id
-            });
+                var id = await _exitService.RegisterExitAsync(dto);
+                return CreatedAtAction(
+                    nameof(GetHistory), 
+                    new { lineId = dto.LineId }, 
+                    new { Id = id }
+                );
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new
+                {
+                    Message = ex.Message
+                });
+            }
         }
 
         [HttpPut]
         [Route("UpdateExit/{id}")]
         public async Task<IActionResult> UpdateExit(int id, [FromBody] ExitUpdateDto dto)
         {
-            if(id != dto.Id)
-            {
-                return BadRequest(new
-                {
-                    message = "El ID de la URL no coinicde con la petición"
-                });                
-            }
+            if (id != dto.Id) return BadRequest(new { Message = "El ID no coincide." });
 
-            var success = await _exitService.UpdateExitAsync(dto);
-
-            if (!success)
+            try
             {
-                return NotFound(new
+                var success = await _exitService.UpdateExitAsync(dto);
+
+                if (!success)
                 {
-                    message = "No se encontró el registro de salida para actualizar"
+                    return NotFound(new
+                    {
+                        Message = "No se encontró el registro."
+                    });
+                }
+
+                return Ok(new
+                {
+                    Message = "Salida actualizada correctamente."
                 });
             }
-
-            return Ok(new
+            catch (InvalidOperationException ex)
             {
-                message = "Salida actualizada correctamente"
-            });
+                return BadRequest(new { Message = ex.Message });
+            }
         }
 
         [HttpDelete]
