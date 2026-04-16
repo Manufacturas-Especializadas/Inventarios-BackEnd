@@ -61,6 +61,15 @@ namespace Infrastructure.Repositories
             return true;
         }
 
+        public async Task<IEnumerable<ExitHeader>> GetExitsHistoryByLineAsync(int lineId)
+        {
+            return await _context.ExitHeaders
+                        .Include(e => e.Details)
+                        .Where(e => e.LineId == lineId)
+                        .OrderByDescending(e => e.CreatedAt)
+                        .ToListAsync();
+        }
+
         public async Task<ExitHeader?> GetExitByIdAsync(int id)
         {
             return await _context.ExitHeaders
