@@ -20,6 +20,16 @@ namespace Application.Services
 
         public async Task<int> RegisterExitAsync(ExitCreateDto dto)
         {
+            foreach(var detail in dto.Details)
+            {
+                var currentStock = await _repository.GetStockByPartNumberAsync(detail.PartNumber, dto.LineId) ?? 0;
+
+                if(detail.Quantity > currentStock)
+                {
+                    throw new InvalidOperationException($"Stock insuficiente para el No. Parte ${detail.PartNumber}. Tines {currentStock} y solicitates {detail.Quantity}");
+                }
+            }
+
             TimeZoneInfo mexicoTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
 
             DateTime nowInMexico = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mexicoTimeZone);
@@ -47,6 +57,22 @@ namespace Application.Services
 
         public async Task<bool> UpdateExitAsync(ExitUpdateDto dto)
         {
+            var exitingExit = await _repository.GetExitByIdAsync(dto.Id);
+            if (exitingExit == null) return false;
+            
+            foreach(var detail in dto.Details)
+            {
+                var currentStock = await _repository.GetStockByPartNumberAsync(detail.PartNumber, dto.LineId) ?? 0;
+                var previousQuantity = exitingExit.Details.FirstOrDefault(d => d.PartNumber == detail.PartNumber)?.Quantity ?? 0;
+
+                var realAvailableStock = currentStock + previousQuantity;
+
+                if(detail.Quantity > realAvailableStock)
+                {
+                    throw new InvalidOperationException($"Stock insuficiente para {detail.PartNumber}. Máximo disponible: {realAvailableStock}");
+                }
+            }
+
             var exit = new ExitHeader
             {
                 Id = dto.Id,
