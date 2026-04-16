@@ -26,6 +26,15 @@ namespace Infrastructure.Repositories
                     .FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        public async Task<IEnumerable<EntryHeader>> GetEntriesHistoryByLineAsyn(int lineId)
+        {
+            return await _context.EntryHeaders
+                    .Include(e => e.Details)
+                    .Where(e => e.LineId == lineId)
+                    .OrderByDescending(e => e.CreatedAt)
+                    .ToListAsync();
+        }
+
         public async Task<bool> DeleteEntryAsync(int id)
         {
             var entry = await _context.EntryHeaders.FindAsync(id);
