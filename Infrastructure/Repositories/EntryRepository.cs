@@ -26,6 +26,19 @@ namespace Infrastructure.Repositories
                     .FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        public async Task<bool> DeleteEntryAsync(int id)
+        {
+            var entry = await _context.EntryHeaders.FindAsync(id);
+
+            if(entry == null) return false;
+
+            _context.EntryHeaders.Remove(entry);
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
         public async Task<bool> UpdateEntryAsync(EntryHeader entry)
         {
             var existingEntry = await _context.EntryHeaders
