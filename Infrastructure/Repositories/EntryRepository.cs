@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<EntryHeader?> GetEntryByIdAsync(int id)
+        public async Task<EntryHeader> GetEntryByIdAsync(int id)
         {
             return await _context.EntryHeaders
                     .Include(e => e.Details)
