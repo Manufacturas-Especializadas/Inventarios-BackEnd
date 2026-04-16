@@ -31,6 +31,11 @@ namespace Application.Services
             }).ToList();
         }
 
+        public async Task<bool> DeleteEntryAsync(int id)
+        {
+            return await _repository.DeleteEntryAsync(id);
+        }
+
         public async Task<bool> UpdateEntryAsync(EntryUpdateDto dto)
         {
             var entry = new EntryHeader
