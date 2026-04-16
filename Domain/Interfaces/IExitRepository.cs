@@ -7,5 +7,11 @@ namespace Domain.Interfaces
         Task<int> CreateExitAsync(ExitHeader exit);
 
         Task<int?> GetStockByPartNumberAsync(string partNumber, int lineId);
+
+        Task<ExitHeader> GetExitByIdAsync(int id);
+
+        Task<bool> UpdateExitAsync(ExitHeader exit);
+
+        Task<bool> DeleteExitAsync(int id);
     }
 }
