@@ -51,9 +51,11 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> DeleteExitAsync(int id)
         {
-            var exit = await _context.ExitHeaders.FindAsync(id);
+            var exit = await _context.ExitHeaders
+            .Include(e => e.Details)
+            .FirstOrDefaultAsync(e => e.Id == id);
 
-            if(exit == null) return false;
+            if (exit == null) return false;
 
             _context.ExitHeaders.Remove(exit);
             await _context.SaveChangesAsync();

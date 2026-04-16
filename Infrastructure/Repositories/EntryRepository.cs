@@ -37,12 +37,13 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> DeleteEntryAsync(int id)
         {
-            var entry = await _context.EntryHeaders.FindAsync(id);
+            var entry = await _context.EntryHeaders
+            .Include(e => e.Details)
+            .FirstOrDefaultAsync(e => e.Id == id);
 
-            if(entry == null) return false;
+            if (entry == null) return false;
 
             _context.EntryHeaders.Remove(entry);
-
             await _context.SaveChangesAsync();
 
             return true;
