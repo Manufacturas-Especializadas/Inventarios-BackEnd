@@ -25,6 +25,26 @@ namespace API.Controllers
             return Ok(history);
         }
 
+        [HttpDelete]
+        [Route("DeleteEntry/{id}")]
+        public async Task<IActionResult> DeleteEntry(int id)
+        {
+            var success = await _entryService.DeleteEntryAsync(id);
+
+            if (!success)
+            {
+                return NotFound(new
+                {
+                    message = "No se encontró el registro de entrada para eliminar"
+                });
+            }
+
+            return Ok(new
+            {
+                message = "Entrada eliminada correctamente"
+            });
+        }
+
         [HttpPut]
         [Route("UpdateEntry/{id}")]
         public async Task<IActionResult> UpdateEntry(int id, [FromBody] EntryUpdateDto dto)
