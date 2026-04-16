@@ -31,6 +31,23 @@ namespace Application.Services
             }).ToList();
         }
 
+        public async Task<bool> UpdateEntryAsync(EntryUpdateDto dto)
+        {
+            var entry = new EntryHeader
+            {
+                Id = dto.Id,
+                LineId = dto.LineId,
+                Details = dto.Details.Select(d => new EntryDetail
+                {
+                    PartNumber = d.PartNumber,
+                    Client = d.Client,
+                    Quantity = d.Quantity
+                }).ToList()
+            };
+
+            return await _repository.UpdateEntryAsync(entry);
+        }
+
         public async Task<int> RegisterEntryAsync(EntryCreateDto dto)
         {
             TimeZoneInfo mexicoTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
