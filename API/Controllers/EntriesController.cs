@@ -16,6 +16,15 @@ namespace API.Controllers
             _entryService = entryService;
         }
 
+        [HttpGet]
+        [Route("history/{lineId}")]
+        public async Task<IActionResult> GetHistory(int lineId)
+        {
+            var history = await _entryService.GetEntriesHistoryAsync(lineId);
+
+            return Ok(history);
+        }
+
         [HttpPost]
         [Route("Create")]
         public async Task<IActionResult> Create(EntryCreateDto dto)
