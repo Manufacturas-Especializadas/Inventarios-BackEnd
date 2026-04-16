@@ -17,6 +17,15 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Route("history/{lineId}")]
+        public async Task<IActionResult> GetHistory(int lineId)
+        {
+            var history = await _exitService.GetExitsHistoryAsync(lineId);
+
+            return Ok(history);
+        }
+
+        [HttpGet]
         [Route("stock/{lineId}/{partNumber}")]
         public async Task<IActionResult> GetStock(int lineId, string partNumber)
         {
