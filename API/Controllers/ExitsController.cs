@@ -49,6 +49,54 @@ namespace API.Controllers
                 message = "Salida registrada",
                 id = id
             });
-        }        
+        }
+
+        [HttpPut]
+        [Route("UpdateExit/{id}")]
+        public async Task<IActionResult> UpdateExit(int id, [FromBody] ExitUpdateDto dto)
+        {
+            if(id != dto.Id)
+            {
+                return BadRequest(new
+                {
+                    message = "El ID de la URL no coinicde con la petición"
+                });                
+            }
+
+            var success = await _exitService.UpdateExitAsync(dto);
+
+            if (!success)
+            {
+                return NotFound(new
+                {
+                    message = "No se encontró el registro de salida para actualizar"
+                });
+            }
+
+            return Ok(new
+            {
+                message = "Salida actualizada correctamente"
+            });
+        }
+
+        [HttpDelete]
+        [Route("DeleteExit/{id}")]
+        public async Task<IActionResult> DeleteExit(int id)
+        {
+            var success = await _exitService.DeleteExitAsync(id);
+
+            if (!success)
+            {
+                return NotFound(new
+                {
+                    message = "No se encontró el registro de salida para eliminar"
+                });
+            }
+
+            return Ok(new
+            {
+                message = "Salida eliminada correctamente"
+            });
+        }
     }
 }
