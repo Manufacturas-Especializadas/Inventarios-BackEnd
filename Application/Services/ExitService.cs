@@ -77,5 +77,29 @@ namespace Application.Services
         {
             return await _repository.GetStockByPartNumberAsync(partNumber, lineId);
         }
+
+        public async Task<List<ExitHistoryDto>> GetExitsHistoryAsync(int lineId)
+        {
+            var exits = await _repository.GetExitsHistoryByLineAsync(lineId);
+
+            return exits.Select(e => new ExitHistoryDto
+            {
+                Id = e.Id,
+                LineId = e.LineId,
+                ShopOrder1 = e.ShopOrder1,
+                ShopOrder2 = e.ShopOrder2,
+                ShopOrder3 = e.ShopOrder3,
+                ShopOrder4 = e.ShopOrder4,
+                ShopOrder5 = e.ShopOrder5,
+                ShopOrder6 = e.ShopOrder6,
+                CreatedAt = e.CreatedAt,
+                Details = e.Details.Select(d => new ExitDetailDto
+                {
+                    PartNumber = d.PartNumber,
+                    Client = d.Client,
+                    Quantity = d.Quantity
+                }).ToList()
+            }).ToList();
+        }
     }
 }
