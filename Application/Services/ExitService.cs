@@ -45,6 +45,34 @@ namespace Application.Services
             return await _repository.CreateExitAsync(exit);
         }
 
+        public async Task<bool> UpdateExitAsync(ExitUpdateDto dto)
+        {
+            var exit = new ExitHeader
+            {
+                Id = dto.Id,
+                LineId = dto.LineId,
+                ShopOrder1 = dto.ShopOrder1,
+                ShopOrder2 = dto.ShopOrder2,
+                ShopOrder3 = dto.ShopOrder3,
+                ShopOrder4 = dto.ShopOrder4,
+                ShopOrder5 = dto.ShopOrder5,
+                ShopOrder6 = dto.ShopOrder6,
+                Details = dto.Details.Select(d => new ExitDetail
+                {
+                    PartNumber = d.PartNumber,
+                    Client = d.Client,
+                    Quantity = d.Quantity
+                }).ToList()
+            };
+
+            return await _repository.UpdateExitAsync(exit);
+        }
+
+        public async Task<bool> DeleteExitAsync(int id)
+        {
+            return await _repository.DeleteExitAsync(id);
+        }
+
         public async Task<int?> GetCurrentStock(string partNumber, int lineId)
         {
             return await _repository.GetStockByPartNumberAsync(partNumber, lineId);
