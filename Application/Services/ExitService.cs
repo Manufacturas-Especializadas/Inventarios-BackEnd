@@ -123,7 +123,7 @@ namespace Application.Services
                 {
                     PartNumber = d.PartNumber,
                     Client = d.Client,
-                    Quantity = d.Quantity
+                    Quantity = d.Quantity!.Value
                 }).ToList()
             }).ToList();
         }
