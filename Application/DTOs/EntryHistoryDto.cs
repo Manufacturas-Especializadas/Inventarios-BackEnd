@@ -14,6 +14,8 @@ namespace Application.DTOs
 
         public DateTime CreatedAt { get; set; }
 
+        public string ShopOrder { get; set; }
+
         public List<EntryDetailDto> Details { get; set; } = new();
 
     }
