@@ -42,7 +42,7 @@ namespace Infrastructure.Services
                 worksheet.Cell(row, 6).Value = item.LastExitDate?.ToString("dd/MM/yyyy HH:mm") ?? "---";
                 worksheet.Cell(row, 7).Value = item.Client ?? "SIN ASIGNAR";
 
-                worksheet.Cell(row, 8).Value = item.ShopOrders;
+                worksheet.Cell(row, 8).Value = item.ExitShopOrders;
 
                 row++;
             }

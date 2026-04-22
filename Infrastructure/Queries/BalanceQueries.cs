@@ -66,7 +66,7 @@ namespace Infrastructure.Queries
                     Stock = e.TotalEntries - (exit?.TotalExits ?? 0),
                     LastEntryDate = e.LastEntryDate,
                     LastExitDate = exit?.LastExitDate,
-                    ShopOrders = exit?.ShopOrders ?? "---"
+                    ExitShopOrders = exit?.ShopOrders ?? "---"
                 };
             }).OrderByDescending(b => b.LastEntryDate).ToList();
 
