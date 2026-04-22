@@ -38,7 +38,7 @@ namespace Infrastructure.Queries
                                 Type = "SALIDA",
                                 PartNumber = d.PartNumber,
                                 Client = d.Client,
-                                Quantity = d.Quantity,
+                                Quantity = d.Quantity!.Value,
                                 Reference = d.ExitHeader.ShopOrder1 +
                                             (d.ExitHeader.ShopOrder2 != null ? ", " + d.ExitHeader.ShopOrder2 : "") +
                                             (d.ExitHeader.ShopOrder3 != null ? ", " + d.ExitHeader.ShopOrder3 : "") +

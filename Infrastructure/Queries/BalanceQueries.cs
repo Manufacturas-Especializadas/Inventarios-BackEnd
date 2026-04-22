@@ -13,16 +13,33 @@ namespace Infrastructure.Queries
 
         public async Task<List<PartBalanceDto>> GetLineBalancesAsync(int lineId)
         {
-            var entriesSummary = await _context.EntryDetails
+            var entriesRaw = await _context.EntryDetails
                         .Where(d => d.EntryHeader.LineId == lineId)
-                        .GroupBy(d => new { d.PartNumber, d.Client })
-                        .Select(g => new
-                        {
-                            PartNumber = g.Key.PartNumber,
-                            Client = g.Key.Client,
-                            TotalEntries = g.Sum(x => x.Quantity),
-                            LastEntryDate = g.Max(x => x.EntryHeader.CreatedAt)
+                        .Select(d => new {
+                            d.PartNumber,
+                            d.Client,
+                            d.Quantity,
+                            d.BoxesQuantity,
+                            d.EntryHeader.CreatedAt,
+                            d.EntryHeader.ShopOrder
                         }).ToListAsync();
+
+            var entriesSummary = entriesRaw
+                        .GroupBy(d => new { d.PartNumber, d.Client })
+                        .Select(g => {
+                            var entrySOs = g.Select(x => x.ShopOrder)
+                                            .Where(so => !string.IsNullOrWhiteSpace(so))
+                                            .Distinct();
+                            return new
+                            {
+                                PartNumber = g.Key.PartNumber,
+                                Client = g.Key.Client,
+                                TotalEntries = g.Sum(x => x.Quantity),
+                                TotalBoxes = g.Sum(x => x.BoxesQuantity ?? 0),
+                                LastEntryDate = g.Max(x => x.CreatedAt),
+                                EntryShopOrders = string.Join(", ", entrySOs)
+                            };
+                        }).ToList();
 
             var exitsRaw = await _context.ExitDetails
                         .Where(d => d.ExitHeader.LineId == lineId)
@@ -48,9 +65,9 @@ namespace Infrastructure.Queries
                             return new
                             {
                                 PartNumber = g.Key,
-                                TotalExits = g.Sum(x => x.Quantity),
+                                TotalExits = g.Sum(x => x.Quantity ?? 0),
                                 LastExitDate = g.Max(x => x.CreatedAt),
-                                ShopOrders = string.Join(", ", allSOs) 
+                                ExitShopOrders = string.Join(", ", allSOs)
                             };
                         }).ToList();
 
@@ -62,11 +79,13 @@ namespace Infrastructure.Queries
                     PartNumber = e.PartNumber,
                     Client = e.Client,
                     TotalEntries = e.TotalEntries,
+                    TotalBoxes = e.TotalBoxes > 0 ? e.TotalBoxes : null,
                     TotalExits = exit?.TotalExits ?? 0,
                     Stock = e.TotalEntries - (exit?.TotalExits ?? 0),
                     LastEntryDate = e.LastEntryDate,
                     LastExitDate = exit?.LastExitDate,
-                    ShopOrders = exit?.ShopOrders ?? "---"
+                    EntryShopOrders = string.IsNullOrWhiteSpace(e.EntryShopOrders) ? "---" : e.EntryShopOrders,
+                    ExitShopOrders = exit != null && !string.IsNullOrWhiteSpace(exit.ExitShopOrders) ? exit.ExitShopOrders : "---"
                 };
             }).OrderByDescending(b => b.LastEntryDate).ToList();
 

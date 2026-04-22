@@ -14,6 +14,8 @@ namespace Application.DTOs
 
         public int TotalEntries { get; set; }
 
+        public int? TotalBoxes { get; set; }
+
         public int TotalExits { get; set; }
 
         public int Stock { get; set; }
@@ -22,6 +24,8 @@ namespace Application.DTOs
 
         public DateTime? LastExitDate { get; set; }
 
-        public string ShopOrders { get; set; } = string.Empty;
+        public string ExitShopOrders { get; set; } = string.Empty;
+
+        public string EntryShopOrders { get; set; } = string.Empty;
     }
 }

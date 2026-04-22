@@ -12,6 +12,8 @@ namespace Application.DTOs
 
         public int LineId { get; set; }
 
+        public string ShopOrder { get; set; }
+
         public List<EntryDetailDto> Details { get; set; } = new();
     }
 }

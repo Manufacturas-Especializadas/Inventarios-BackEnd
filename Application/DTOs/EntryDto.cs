@@ -10,6 +10,8 @@ namespace Application.DTOs
     {
         public int LineId { get; set; }
 
+        public string? ShopOrder { get; set; }
+
         public List<EntryDetailDto> Details { get; set; } = new();
     }
 
@@ -18,5 +20,7 @@ namespace Application.DTOs
         public string PartNumber { get; set; } = string.Empty;
         public string? Client { get; set; }
         public int Quantity { get; set; }
+
+        public int? BoxesQuantity { get; set; }
     }
 }

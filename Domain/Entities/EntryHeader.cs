@@ -14,6 +14,8 @@ namespace Domain.Entities
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public string? ShopOrder { get; set; }
+
         public List<EntryDetail> Details { get; set; } = new();
     }
 }
