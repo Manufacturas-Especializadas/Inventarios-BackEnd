@@ -25,6 +25,11 @@ namespace Infrastructure.Persistence
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+
+                entity.Property(e => e.ShopOrder)
+                        .HasMaxLength(50)
+                        .IsRequired(false);
+
                 entity.HasMany(e => e.Details)
                       .WithOne(d => d.EntryHeader)
                       .HasForeignKey(d => d.EntryHeaderId)
@@ -35,6 +40,9 @@ namespace Infrastructure.Persistence
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.PartNumber).IsRequired().HasMaxLength(50);
+
+                entity.Property(e => e.BoxesQuantity)
+                       .IsRequired(false);
             });
 
             modelBuilder.Entity<ExitHeader>(entity =>
