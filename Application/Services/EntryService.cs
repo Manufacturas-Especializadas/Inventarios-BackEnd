@@ -55,6 +55,15 @@ namespace Application.Services
 
         public async Task<int> RegisterEntryAsync(EntryCreateDto dto)
         {
+            if(dto.LineId == 11)
+            {
+                if (string.IsNullOrEmpty(dto.ShopOrder))
+                    throw new Exception("El Shop Order es obligatorio para la Línea 12");
+
+                if (dto.Details.Any(d => d.BoxesQuantity == null || d.BoxesQuantity <= 0))
+                    throw new Exception("La cantidad de cajas es obligatoria para la Línea 12");
+            }
+
             TimeZoneInfo mexicoTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
 
             DateTime nowInMexico = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mexicoTimeZone);
@@ -62,12 +71,14 @@ namespace Application.Services
             var entry = new EntryHeader
             {
                 LineId = dto.LineId,
+                ShopOrder = dto.ShopOrder,
                 CreatedAt = nowInMexico,
                 Details = dto.Details.Select(d => new EntryDetail
                 {
                     PartNumber = d.PartNumber,
                     Client = d.Client,
-                    Quantity = d.Quantity
+                    Quantity = d.Quantity,
+                    BoxesQuantity = d.BoxesQuantity,
                 }).ToList()
             };
 
