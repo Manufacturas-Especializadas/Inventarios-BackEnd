@@ -10,7 +10,7 @@ public class ExitDetail
 
     public string? Client { get; set; }
 
-    public int Quantity { get; set; }
+    public int? Quantity { get; set; }
 
     public ExitHeader ExitHeader { get; set; } = null!;
 }
