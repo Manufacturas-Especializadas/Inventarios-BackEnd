@@ -22,11 +22,13 @@ namespace Application.Services
                 Id = e.Id,
                 LineId = e.LineId,
                 CreatedAt = e.CreatedAt,
+                ShopOrder = e.ShopOrder!,
                 Details = e.Details.Select(d => new EntryDetailDto
                 {
                     PartNumber = d.PartNumber,
                     Client = d.Client,
-                    Quantity = d.Quantity
+                    Quantity = d.Quantity,
+                    BoxesQuantity = d.BoxesQuantity,
                 }).ToList()
             }).ToList();
         }
