@@ -44,11 +44,13 @@ namespace Application.Services
             {
                 Id = dto.Id,
                 LineId = dto.LineId,
+                ShopOrder = dto.ShopOrder,
                 Details = dto.Details.Select(d => new EntryDetail
                 {
                     PartNumber = d.PartNumber,
                     Client = d.Client,
-                    Quantity = d.Quantity
+                    Quantity = d.Quantity,
+                    BoxesQuantity= d.BoxesQuantity,
                 }).ToList()
             };
 
