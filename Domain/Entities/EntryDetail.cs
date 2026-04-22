@@ -18,6 +18,8 @@ namespace Domain.Entities
 
         public int Quantity { get; set; }
 
+        public int? BoxesQuantity { get; set; }
+
         public EntryHeader EntryHeader{ get; set; } = null!;
     }
 }
