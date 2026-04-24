@@ -17,6 +17,10 @@ namespace Infrastructure.Persistence
 
         public DbSet<ExitDetail> ExitDetails => Set<ExitDetail>();
 
+        public DbSet<ShippingRelease> ShippingReleases => Set<ShippingRelease>();
+
+        public DbSet<ShippingScan> ShippingScans => Set<ShippingScan>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -72,6 +76,27 @@ namespace Infrastructure.Persistence
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ShippingRelease>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.ShopOrder).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.PartNumber).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.PackerName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+
+                entity.HasMany(e => e.Scans)
+                        .WithOne(s => s.ShippingRelease)
+                        .HasForeignKey(s => s.ShippingReleaseId)
+                        .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<ShippingScan>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.ScannedLabelId).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.ScannedAt).HasDefaultValueSql("GETDATE()");
             });
         }
     }
