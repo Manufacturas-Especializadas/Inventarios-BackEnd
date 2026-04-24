@@ -19,6 +19,7 @@ builder.Services.AddScoped<IExitRepository, ExitRepository>();
 builder.Services.AddScoped<IMovementQueries, MovementQueries>();
 builder.Services.AddScoped<IBalanceQueries, BalanceQueries>();
 builder.Services.AddScoped<IExcelReportService, ExcelReportService>();
+builder.Services.AddScoped<IShippingService, ShippingService>();
 
 //Services
 builder.Services.AddScoped<EntryService>();
