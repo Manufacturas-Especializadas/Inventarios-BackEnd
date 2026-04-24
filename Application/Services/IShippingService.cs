@@ -1,0 +1,18 @@
+﻿using Application.DTOs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Services
+{
+    public interface IShippingService
+    {
+        Task<ShippingReleaseDto> CreateReleaseAsync(CreateShippingReleaseDto dto);
+
+        Task<bool> RegisterScanAsync(RegisterScanDto dto);
+
+        Task<ShippingReleaseDto?> GetActiveReleaseAsync(int id);
+    }
+}
