@@ -18,5 +18,7 @@ namespace Domain.Interfaces
         Task<bool> DeleteEntryAsync(int id);
 
         Task<IEnumerable<EntryHeader>> GetEntriesHistoryByLineAsync(int lineId);
+
+        Task<int> GetDailyEntriesCountAsync(int lineId, DateTime date);
     }
 }
