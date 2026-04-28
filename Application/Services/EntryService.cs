@@ -22,6 +22,7 @@ namespace Application.Services
                 Id = e.Id,
                 LineId = e.LineId,
                 CreatedAt = e.CreatedAt,
+                Folio = e.Folio!,
                 ShopOrder = e.ShopOrder!,
                 Details = e.Details.Select(d => new EntryDetailDto
                 {
@@ -57,7 +58,7 @@ namespace Application.Services
             return await _repository.UpdateEntryAsync(entry);
         }
 
-        public async Task<int> RegisterEntryAsync(EntryCreateDto dto)
+        public async Task<string> RegisterEntryAsync(EntryCreateDto dto)
         {
             if(dto.LineId == 11)
             {
@@ -72,10 +73,24 @@ namespace Application.Services
 
             DateTime nowInMexico = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mexicoTimeZone);
 
+            string generatedFolio = string.Empty;
+
+            if(dto.LineId == 11)
+            {
+                string dateString = nowInMexico.ToString("yyMMdd");
+
+                int countToday = await _repository.GetDailyEntriesCountAsync(dto.LineId, nowInMexico.Date);
+
+                string sequence = (countToday + 1).ToString("D5");
+
+                generatedFolio = $"{sequence}";
+            }
+
             var entry = new EntryHeader
             {
                 LineId = dto.LineId,
                 ShopOrder = dto.ShopOrder,
+                Folio = generatedFolio,
                 CreatedAt = nowInMexico,
                 Details = dto.Details.Select(d => new EntryDetail
                 {
@@ -86,7 +101,9 @@ namespace Application.Services
                 }).ToList()
             };
 
-            return await _repository.CreateEntryAsync(entry);
+            await _repository.CreateEntryAsync(entry);
+
+            return generatedFolio;
         }
     }
 }

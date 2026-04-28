@@ -16,6 +16,8 @@ namespace Application.DTOs
 
         public string ShopOrder { get; set; }
 
+        public string Folio { get; set; }
+
         public List<EntryDetailDto> Details { get; set; } = new();
 
     }

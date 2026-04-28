@@ -35,6 +35,13 @@ namespace Infrastructure.Repositories
                     .ToListAsync();
         }
 
+        public async Task<int> GetDailyEntriesCountAsync(int lineId, DateTime date)
+        {
+            return await _context.EntryHeaders
+                    .Where(e => e.LineId == lineId && e.CreatedAt.Date == date.Date)
+                    .CountAsync();
+        }
+
         public async Task<bool> DeleteEntryAsync(int id)
         {
             var entry = await _context.EntryHeaders
