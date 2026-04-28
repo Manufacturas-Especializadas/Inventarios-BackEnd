@@ -22,6 +22,7 @@ namespace Application.Services
                 Id = e.Id,
                 LineId = e.LineId,
                 CreatedAt = e.CreatedAt,
+                Folio = e.Folio!,
                 ShopOrder = e.ShopOrder!,
                 Details = e.Details.Select(d => new EntryDetailDto
                 {
