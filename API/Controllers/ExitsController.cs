@@ -46,6 +46,31 @@ namespace API.Controllers
             });
         }
 
+        [HttpGet]
+        [Route("preview/{lineId}/{folio}")]
+        public async Task<IActionResult> GetFolioPreview(int lineId, string folio)
+        {
+            try
+            {
+                var preview = await _exitService.GetFolioPreviewAsync(folio, lineId);
+
+                return Ok(preview);
+            }
+            catch(InvalidOperationException ex)
+            {
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(new
+                {
+                    message = ex.Message
+                });
+            }
+        }
 
         [HttpPost]
         [Route("CreateExit")]
