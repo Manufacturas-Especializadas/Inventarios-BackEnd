@@ -21,7 +21,8 @@ namespace Infrastructure.Queries
                             d.Quantity,
                             d.BoxesQuantity,
                             d.EntryHeader.CreatedAt,
-                            d.EntryHeader.ShopOrder
+                            d.EntryHeader.ShopOrder,
+                            d.EntryHeader.Folio
                         }).ToListAsync();
 
             var entriesSummary = entriesRaw
@@ -30,6 +31,11 @@ namespace Infrastructure.Queries
                             var entrySOs = g.Select(x => x.ShopOrder)
                                             .Where(so => !string.IsNullOrWhiteSpace(so))
                                             .Distinct();
+
+                            var entryFolios = g.Select(x => x.Folio)
+                                             .Where(f => !string.IsNullOrWhiteSpace(f))
+                                             .Distinct();
+
                             return new
                             {
                                 PartNumber = g.Key.PartNumber,
@@ -37,7 +43,8 @@ namespace Infrastructure.Queries
                                 TotalEntries = g.Sum(x => x.Quantity),
                                 TotalBoxes = g.Sum(x => x.BoxesQuantity ?? 0),
                                 LastEntryDate = g.Max(x => x.CreatedAt),
-                                EntryShopOrders = string.Join(", ", entrySOs)
+                                EntryShopOrders = string.Join(", ", entrySOs),
+                                Folio = string.Join(", ", entryFolios)
                             };
                         }).ToList();
 
@@ -84,6 +91,7 @@ namespace Infrastructure.Queries
                     Stock = e.TotalEntries - (exit?.TotalExits ?? 0),
                     LastEntryDate = e.LastEntryDate,
                     LastExitDate = exit?.LastExitDate,
+                    Folio = string.IsNullOrWhiteSpace(e.Folio) ? "---" : e.Folio,
                     EntryShopOrders = string.IsNullOrWhiteSpace(e.EntryShopOrders) ? "---" : e.EntryShopOrders,
                     ExitShopOrders = exit != null && !string.IsNullOrWhiteSpace(exit.ExitShopOrders) ? exit.ExitShopOrders : "---"
                 };
