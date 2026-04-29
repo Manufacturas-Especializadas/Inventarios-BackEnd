@@ -27,5 +27,7 @@ namespace Application.DTOs
         public string ExitShopOrders { get; set; } = string.Empty;
 
         public string EntryShopOrders { get; set; } = string.Empty;
+
+        public string Folio { get; set; } = string.Empty;
     }
 }

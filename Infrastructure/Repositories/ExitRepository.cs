@@ -63,6 +63,12 @@ namespace Infrastructure.Repositories
             return true;
         }
 
+        public async Task<bool> IsFolioProcessedAsync(string folio, int lineId)
+        {
+            return await _context.ExitHeaders
+                        .AnyAsync(e => e.Folio == folio && e.LineId == lineId);
+        }
+
         public async Task<IEnumerable<ExitHeader>> GetExitsHistoryByLineAsync(int lineId)
         {
             return await _context.ExitHeaders
@@ -99,6 +105,12 @@ namespace Infrastructure.Repositories
 
             return entries - exits;
         }
-
+    
+        public async Task<EntryHeader?> GetEntryByFolioAsync(string folio, int lineId)
+        {
+            return await _context.EntryHeaders
+                    .Include(e => e.Details)
+                    .FirstOrDefaultAsync(e => e.Folio == folio && e.LineId == lineId);
+        } 
     }
 }

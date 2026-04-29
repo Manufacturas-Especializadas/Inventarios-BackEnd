@@ -15,5 +15,9 @@ namespace Domain.Interfaces
         Task<bool> DeleteExitAsync(int id);
 
         Task<IEnumerable<ExitHeader>> GetExitsHistoryByLineAsync(int lineId);
+
+        Task<bool> IsFolioProcessedAsync(string Folio, int lineId);
+
+        Task<EntryHeader?> GetEntryByFolioAsync(string Folio, int lineId);
     }
 }

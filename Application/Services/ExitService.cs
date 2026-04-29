@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,6 +50,43 @@ namespace Application.Services
                     PartNumber = d.PartNumber,
                     Client = d.Client,
                     Quantity = d.Quantity
+                }).ToList()
+            };
+
+            return await _repository.CreateExitAsync(exit);
+        }
+
+        public async Task<int> RegisterExitByAsync(ExitByFolioDto dto)
+        {
+            bool isProcessed = await _repository.IsFolioProcessedAsync(dto.Folio, dto.LineId);
+
+            if (isProcessed)
+            {
+                throw new InvalidOperationException("Este folio ya fue procesado y se le dio salida anteriormente");
+            }
+
+            var entryOriginal = await _repository.GetEntryByFolioAsync(dto.Folio, dto.LineId);
+
+            if (entryOriginal == null)
+            {
+                throw new KeyNotFoundException("El folio escaneado no existe o no pertenece a esta línea");
+            }
+
+            TimeZoneInfo mexicoTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+
+            DateTime nowInMexico = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mexicoTimeZone);
+
+            var exit = new ExitHeader
+            {
+                LineId = dto.LineId,
+                Folio = dto.Folio,
+                ShopOrder1 = string.IsNullOrEmpty(entryOriginal.ShopOrder) ? "N/A" : entryOriginal.ShopOrder,
+                CreatedAt = nowInMexico,
+                Details = entryOriginal.Details.Select(d => new ExitDetail
+                {
+                    PartNumber = d.PartNumber,
+                    Client = d.Client,
+                    Quantity = d.Quantity,
                 }).ToList()
             };
 
@@ -126,6 +164,28 @@ namespace Application.Services
                     Quantity = d.Quantity!.Value
                 }).ToList()
             }).ToList();
+        }
+
+        public async Task<object> GetFolioPreviewAsync(string folio, int lineId)
+        {
+            if(await _repository.IsFolioProcessedAsync(folio, lineId))
+            {
+                throw new InvalidOperationException("Este folio ya tiene salida");
+            }
+
+            var entry = await _repository.GetEntryByFolioAsync(folio, lineId);
+            if(entry == null)
+            {
+                throw new KeyNotFoundException("Folio no encontrado");
+            }
+
+            return new
+            {
+                ShopOrder = string.IsNullOrEmpty(entry.ShopOrder) ? "N/A" : entry.ShopOrder,
+                PartNumber = string.Join(", ", entry.Details.Select(d => d.PartNumber)),
+                Boxes = entry.Details.Sum(d => d.BoxesQuantity ?? 0),
+                Pieces = entry.Details.Sum(d => d.Quantity)
+            };
         }
     }
 }

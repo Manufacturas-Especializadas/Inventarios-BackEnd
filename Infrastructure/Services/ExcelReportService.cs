@@ -18,11 +18,18 @@ namespace Infrastructure.Services
 
             List<string> headersList = new() { "No. Parte" };
 
-            if (isL12) headersList.Add("SO Entrada");
+            if (isL12)
+            {
+                headersList.Add("Folio");
+                headersList.Add("SO Entrada");
+            }
 
             headersList.Add("Entradas");
 
-            if (isL12) headersList.Add("Cajas");
+            if (isL12)
+            {
+                headersList.Add("Cajas");
+            }
 
             headersList.Add("Salidas");
 
@@ -62,15 +69,25 @@ namespace Infrastructure.Services
 
                 worksheet.Cell(row, col++).Value = item.PartNumber;
 
-                if (isL12) worksheet.Cell(row, col++).Value = item.EntryShopOrders;
+                if (isL12)
+                {
+                    worksheet.Cell(row, col++).Value = item.Folio ?? "---";
+                    worksheet.Cell(row, col++).Value = item.EntryShopOrders;
+                }
 
                 worksheet.Cell(row, col++).Value = item.TotalEntries;
 
-                if (isL12) worksheet.Cell(row, col++).Value = item.TotalBoxes?.ToString() ?? "---";
+                if (isL12)
+                {
+                    worksheet.Cell(row, col++).Value = item.TotalBoxes?.ToString() ?? "---";
+                }
 
                 worksheet.Cell(row, col++).Value = item.TotalExits;
 
-                if (isL12) worksheet.Cell(row, col++).Value = item.ExitShopOrders;
+                if (isL12)
+                {
+                    worksheet.Cell(row, col++).Value = item.ExitShopOrders;
+                }
 
                 var stockCell = worksheet.Cell(row, col++);
                 stockCell.Value = item.Stock;
@@ -78,12 +95,13 @@ namespace Infrastructure.Services
                 if (item.Stock <= 0) stockCell.Style.Font.FontColor = XLColor.Red;
 
                 worksheet.Cell(row, col++).Value = item.LastEntryDate?.ToString("dd/MM/yyyy HH:mm") ?? "---";
-
                 worksheet.Cell(row, col++).Value = item.LastExitDate?.ToString("dd/MM/yyyy HH:mm") ?? "---";
-
                 worksheet.Cell(row, col++).Value = item.Client ?? "SIN ASIGNAR";
 
-                if (!isL12) worksheet.Cell(row, col++).Value = item.ExitShopOrders;
+                if (!isL12)
+                {
+                    worksheet.Cell(row, col++).Value = item.ExitShopOrders;
+                }
 
                 row++;
             }

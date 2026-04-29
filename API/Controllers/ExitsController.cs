@@ -46,6 +46,31 @@ namespace API.Controllers
             });
         }
 
+        [HttpGet]
+        [Route("preview/{lineId}/{folio}")]
+        public async Task<IActionResult> GetFolioPreview(int lineId, string folio)
+        {
+            try
+            {
+                var preview = await _exitService.GetFolioPreviewAsync(folio, lineId);
+
+                return Ok(preview);
+            }
+            catch(InvalidOperationException ex)
+            {
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(new
+                {
+                    message = ex.Message
+                });
+            }
+        }
 
         [HttpPost]
         [Route("CreateExit")]
@@ -65,6 +90,43 @@ namespace API.Controllers
                 return BadRequest(new
                 {
                     Message = ex.Message
+                });
+            }
+        }
+
+        [HttpPost]
+        [Route("CreateExitByFolio")]
+        public async Task<IActionResult> CreateExitByFolio([FromBody] ExitByFolioDto dto)
+        {
+            try
+            {
+                var id = await _exitService.RegisterExitByAsync(dto);
+
+                return Ok(new
+                {
+                    message = $"Salida registrada correctamente para el folio {dto.Folio}",
+                    exitId = id
+                });
+            }
+            catch(InvalidOperationException ex)
+            {
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(new
+                {
+                    message = ex.Message
+                });
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Ocurrio un error interno al precesar la salida"
                 });
             }
         }
