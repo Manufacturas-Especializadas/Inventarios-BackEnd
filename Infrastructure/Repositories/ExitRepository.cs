@@ -63,6 +63,12 @@ namespace Infrastructure.Repositories
             return true;
         }
 
+        public async Task<bool> IsFolioProcessedAsync(string folio, int lineId)
+        {
+            return await _context.ExitHeaders
+                        .AnyAsync(e => e.Folio == folio && e.LineId == lineId);
+        }
+
         public async Task<IEnumerable<ExitHeader>> GetExitsHistoryByLineAsync(int lineId)
         {
             return await _context.ExitHeaders
