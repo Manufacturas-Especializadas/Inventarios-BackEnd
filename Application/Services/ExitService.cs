@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -163,6 +164,28 @@ namespace Application.Services
                     Quantity = d.Quantity!.Value
                 }).ToList()
             }).ToList();
+        }
+
+        public async Task<object> GetFolioPreviewAsync(string folio, int lineId)
+        {
+            if(await _repository.IsFolioProcessedAsync(folio, lineId))
+            {
+                throw new InvalidOperationException("Este folio ya tiene salida");
+            }
+
+            var entry = await _repository.GetEntryByFolioAsync(folio, lineId);
+            if(entry == null)
+            {
+                throw new KeyNotFoundException("Folio no encontrado");
+            }
+
+            return new
+            {
+                ShopOrder = string.IsNullOrEmpty(entry.ShopOrder) ? "N/A" : entry.ShopOrder,
+                PartNumber = string.Join(", ", entry.Details.Select(d => d.PartNumber)),
+                Boxes = entry.Details.Sum(d => d.BoxesQuantity ?? 0),
+                Pieces = entry.Details.Sum(d => d.Quantity)
+            };
         }
     }
 }
