@@ -69,6 +69,43 @@ namespace API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("CreateExitByFolio")]
+        public async Task<IActionResult> CreateExitByFolio([FromBody] ExitByFolioDto dto)
+        {
+            try
+            {
+                var id = await _exitService.RegisterExitByAsync(dto);
+
+                return Ok(new
+                {
+                    message = $"Salida registrada correctamente para el folio {dto.Folio}",
+                    exitId = id
+                });
+            }
+            catch(InvalidOperationException ex)
+            {
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(new
+                {
+                    message = ex.Message
+                });
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Ocurrio un error interno al precesar la salida"
+                });
+            }
+        }
+
         [HttpPut]
         [Route("UpdateExit/{id}")]
         public async Task<IActionResult> UpdateExit(int id, [FromBody] ExitUpdateDto dto)
