@@ -26,6 +26,8 @@ namespace Domain.Entities
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public string? Folio { get; set; }
+
         public List<ExitDetail> Details { get; set; } = new();
     }
 }
