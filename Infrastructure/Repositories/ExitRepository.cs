@@ -105,6 +105,12 @@ namespace Infrastructure.Repositories
 
             return entries - exits;
         }
-
+    
+        public async Task<EntryHeader?> GetEntryByFolioAsync(string folio, int lineId)
+        {
+            return await _context.EntryHeaders
+                    .Include(e => e.Details)
+                    .FirstOrDefaultAsync(e => e.Folio == folio && e.LineId == lineId);
+        } 
     }
 }
