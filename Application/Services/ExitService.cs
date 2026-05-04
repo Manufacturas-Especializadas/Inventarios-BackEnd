@@ -194,7 +194,7 @@ namespace Application.Services
 
             return entities.Select(e => new ExitReportDto
             {
-                Folio = e.Folio!,
+                Folio = e.Folio ?? "N/A",
                 ShopOrder = e.ShopOrder1,
                 PartNumber = e.Details.FirstOrDefault()?.PartNumber!,
                 Quantity = e.Details?.FirstOrDefault()?.Quantity ?? 0
