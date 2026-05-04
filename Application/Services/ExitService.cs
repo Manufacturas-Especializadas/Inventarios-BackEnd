@@ -190,13 +190,13 @@ namespace Application.Services
 
         public async Task<IEnumerable<ExitReportDto>> GetReportDataAsync(List<string> folios)
         {
-            var entities = await _repository.GetExitsByFolioAsync(folios);
+            var entities = await _repository.GetEntriesByFoliosAsync(folios);
 
             return entities.Select(e => new ExitReportDto
             {
-                Folio = e.Folio ?? "N/A",
-                ShopOrder = e.ShopOrder1,
-                PartNumber = e.Details.FirstOrDefault()?.PartNumber!,
+                Folio = !string.IsNullOrEmpty(e.Folio) ? e.Folio : e.Id.ToString(),
+                ShopOrder = e.ShopOrder ?? "N/A",
+                PartNumber = e.Details.FirstOrDefault()?.PartNumber ?? "",
                 Quantity = e.Details?.FirstOrDefault()?.Quantity ?? 0
             });
         }

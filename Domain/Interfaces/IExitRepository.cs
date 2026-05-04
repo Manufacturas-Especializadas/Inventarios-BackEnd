@@ -20,6 +20,6 @@ namespace Domain.Interfaces
 
         Task<EntryHeader?> GetEntryByFolioAsync(string Folio, int lineId);
 
-        Task<IEnumerable<ExitHeader>> GetExitsByFolioAsync(List<string> folios);
+        Task<IEnumerable<EntryHeader>> GetEntriesByFoliosAsync(List<string> folios);
     }
 }

@@ -113,14 +113,14 @@ namespace Infrastructure.Repositories
                     .FirstOrDefaultAsync(e => e.Folio == folio && e.LineId == lineId);
         }
 
-        public async Task<IEnumerable<ExitHeader>> GetExitsByFolioAsync(List<string> folios)
+        public async Task<IEnumerable<EntryHeader>> GetEntriesByFoliosAsync(List<string> folios)
         {
             var ids = folios
                 .Where(f => int.TryParse(f, out _))
                 .Select(int.Parse)
                 .ToList();
 
-            return await _context.ExitHeaders
+            return await _context.EntryHeaders
                 .Include(e => e.Details)
                 .Where(e => folios.Contains(e.Folio) || ids.Contains(e.Id))
                 .ToListAsync();
