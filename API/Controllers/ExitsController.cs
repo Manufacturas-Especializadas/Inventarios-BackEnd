@@ -131,6 +131,15 @@ namespace API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("Generate-Report")]
+        public async Task<ActionResult<IEnumerable<ExitReportDto>>> GetReport([FromBody] List<string> folios)
+        {
+            var result = await _exitService.GetReportDataAsync(folios);
+
+            return Ok(result);
+        }
+
         [HttpPut]
         [Route("UpdateExit/{id}")]
         public async Task<IActionResult> UpdateExit(int id, [FromBody] ExitUpdateDto dto)
