@@ -112,5 +112,12 @@ namespace Infrastructure.Repositories
                     .Include(e => e.Details)
                     .FirstOrDefaultAsync(e => e.Folio == folio && e.LineId == lineId);
         } 
+
+        public async Task<IEnumerable<ExitHeader>> GetExitsByFolioAsync(List<string> folios)
+        {
+            return await _context.ExitHeaders
+                    .Where(e => folios.Contains(e.Folio!))
+                    .ToListAsync();
+        }
     }
 }
