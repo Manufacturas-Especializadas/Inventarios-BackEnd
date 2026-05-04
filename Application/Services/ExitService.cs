@@ -187,5 +187,18 @@ namespace Application.Services
                 Pieces = entry.Details.Sum(d => d.Quantity)
             };
         }
+
+        public async Task<IEnumerable<ExitReportDto>> GetReportDataAsync(List<string> folios)
+        {
+            var entities = await _repository.GetExitsByFolioAsync(folios);
+
+            return entities.Select(e => new ExitReportDto
+            {
+                Folio = e.Folio ?? "N/A",
+                ShopOrder = e.ShopOrder1,
+                PartNumber = e.Details.FirstOrDefault()?.PartNumber!,
+                Quantity = e.Details?.FirstOrDefault()?.Quantity ?? 0
+            });
+        }
     }
 }

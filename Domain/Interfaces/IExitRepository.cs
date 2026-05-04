@@ -19,5 +19,7 @@ namespace Domain.Interfaces
         Task<bool> IsFolioProcessedAsync(string Folio, int lineId);
 
         Task<EntryHeader?> GetEntryByFolioAsync(string Folio, int lineId);
+
+        Task<IEnumerable<ExitHeader>> GetExitsByFolioAsync(List<string> folios);
     }
 }
