@@ -22,7 +22,7 @@ namespace Infrastructure.Persistence
 
         public DbSet<ShippingScan> ShippingScans => Set<ShippingScan>();
 
-        public DbSet<ExitReportLog> ExitReportLogs => Set<ExitReportLog>();
+        public DbSet<ExitReportLog> ExitReportLog => Set<ExitReportLog>();
 
         public DbSet<ExitReportLogDetail> ExitReportLogDetails => Set<ExitReportLogDetail>();
 

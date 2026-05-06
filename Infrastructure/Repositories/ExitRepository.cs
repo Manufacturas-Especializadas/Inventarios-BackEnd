@@ -44,7 +44,7 @@ namespace Infrastructure.Repositories
                 }).ToList()
             };
 
-            _context.ExitReportLogs.Add(log);
+            _context.ExitReportLog.Add(log);
             await _context.SaveChangesAsync();
 
             return log.Id;
@@ -168,7 +168,7 @@ namespace Infrastructure.Repositories
         }
         public async Task<IEnumerable<ExitReportLog>> GetReportLogsAsync(int lineId)
         {
-            return await _context.ExitReportLogs
+            return await _context.ExitReportLog
                 .Include(r => r.Details)
                 .Where(r => r.LineId == lineId)
                 .OrderByDescending(r => r.PrintedAt)
