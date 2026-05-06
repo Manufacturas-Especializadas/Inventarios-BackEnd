@@ -204,5 +204,9 @@ namespace Application.Services
                 Quantity = e.Details?.FirstOrDefault()?.Quantity ?? 0
             });
         }
+        public async Task<IEnumerable<ExitReportLog>> GetReportLogsAsync(int lineId)
+        {
+            return await _repository.GetReportLogsAsync(lineId);
+        }
     }
 }
