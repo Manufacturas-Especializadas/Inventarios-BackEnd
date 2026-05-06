@@ -90,6 +90,8 @@ namespace Application.Services
                 }).ToList()
             };
 
+            await _repository.MarkFolioAsProcessedInLogAsync(dto.Folio);
+
             return await _repository.CreateExitAsync(exit);
         }
 
