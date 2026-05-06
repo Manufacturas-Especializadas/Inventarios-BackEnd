@@ -92,6 +92,24 @@ namespace Infrastructure.Repositories
                         .AnyAsync(e => e.Folio == folio && e.LineId == lineId);
         }
 
+        public async Task<bool> MarkFolioAsProcessedInLogAsync(string folio)
+        {
+            var detail = await _context.ExitReportLogDetails
+                    .Where(d => d.Folio == folio && !d.IsProcessed)
+                    .FirstOrDefaultAsync();
+
+            if(detail != null)
+            {
+                detail.IsProcessed = true;
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+
         public async Task<IEnumerable<ExitHeader>> GetExitsHistoryByLineAsync(int lineId)
         {
             return await _context.ExitHeaders
