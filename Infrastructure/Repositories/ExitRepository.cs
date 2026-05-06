@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs;
+using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,28 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
 
             return exit.Id;
+        }
+
+        public async Task<int> CreateReportLogAsync(int lineId, List<string> folios)
+        {
+            TimeZoneInfo mexicoTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+            DateTime nowInMexico = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mexicoTimeZone);
+
+            var log = new ExitReportLog
+            {
+                LineId = lineId,
+                PrintedAt = nowInMexico,
+                Details = folios.Select(folio => new ExitReportLogDetail
+                {
+                    Folio = folio,
+                    IsProcessed = false,
+                }).ToList()
+            };
+
+            _context.ExitReportLogs.Add(log);
+            await _context.SaveChangesAsync();
+
+            return log.Id;
         }
 
         public async Task<bool> UpdateExitAsync(ExitHeader exit)
