@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence
@@ -20,6 +21,10 @@ namespace Infrastructure.Persistence
         public DbSet<ShippingRelease> ShippingReleases => Set<ShippingRelease>();
 
         public DbSet<ShippingScan> ShippingScans => Set<ShippingScan>();
+
+        public DbSet<ExitReportLog> ExitReportLogs => Set<ExitReportLog>();
+
+        public DbSet<ExitReportLogDetail> ExitReportLogDetails => Set<ExitReportLogDetail>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
