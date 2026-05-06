@@ -72,6 +72,26 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("report-logs/{lineId}")]
+        public async Task<IActionResult> GetReportLogs(int lineId)
+        {
+            var logs = await _exitService.GetReportLogsAsync(lineId);
+
+            var result = logs.Select(log => new
+            {
+                id = log.Id,
+                printedAt = log.PrintedAt,
+                details = log.Details.Select(d => new
+                {
+                    folio = d.Folio,
+                    isProcessed = d.IsProcessed
+                }).ToList()
+            });
+
+            return Ok(result);
+        }
+
         [HttpPost]
         [Route("CreateExit")]
         public async Task<IActionResult> Create(ExitCreateDto dto)
@@ -133,9 +153,9 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("Generate-Report")]
-        public async Task<ActionResult<IEnumerable<ExitReportDto>>> GetReport([FromBody] List<string> folios)
+        public async Task<ActionResult<IEnumerable<ExitReportDto>>> GetReport(int lineId, [FromBody] List<string> folios)
         {
-            var result = await _exitService.GetReportDataAsync(folios);
+            var result = await _exitService.GetReportDataAsync(lineId,folios);
 
             return Ok(result);
         }

@@ -20,5 +20,7 @@ namespace Domain.Interfaces
         Task<IEnumerable<EntryHeader>> GetEntriesHistoryByLineAsync(int lineId);
 
         Task<int> GetDailyEntriesCountAsync(int lineId, DateTime date);
+
+        Task<int> GetMaxFolioSequenceTodayAsync(int lineId, DateTime date);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs;
+using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,28 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
 
             return exit.Id;
+        }
+
+        public async Task<int> CreateReportLogAsync(int lineId, List<string> folios)
+        {
+            TimeZoneInfo mexicoTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+            DateTime nowInMexico = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mexicoTimeZone);
+
+            var log = new ExitReportLog
+            {
+                LineId = lineId,
+                PrintedAt = nowInMexico,
+                Details = folios.Select(folio => new ExitReportLogDetail
+                {
+                    Folio = folio,
+                    IsProcessed = false,
+                }).ToList()
+            };
+
+            _context.ExitReportLog.Add(log);
+            await _context.SaveChangesAsync();
+
+            return log.Id;
         }
 
         public async Task<bool> UpdateExitAsync(ExitHeader exit)
@@ -68,6 +91,24 @@ namespace Infrastructure.Repositories
             return await _context.ExitHeaders
                         .AnyAsync(e => e.Folio == folio && e.LineId == lineId);
         }
+
+        public async Task<bool> MarkFolioAsProcessedInLogAsync(string folio)
+        {
+            var detail = await _context.ExitReportLogDetails
+                    .Where(d => d.Folio == folio && !d.IsProcessed)
+                    .FirstOrDefaultAsync();
+
+            if(detail != null)
+            {
+                detail.IsProcessed = true;
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
 
         public async Task<IEnumerable<ExitHeader>> GetExitsHistoryByLineAsync(int lineId)
         {
@@ -123,6 +164,15 @@ namespace Infrastructure.Repositories
             return await _context.EntryHeaders
                 .Include(e => e.Details)
                 .Where(e => folios.Contains(e.Folio) || ids.Contains(e.Id))
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<ExitReportLog>> GetReportLogsAsync(int lineId)
+        {
+            return await _context.ExitReportLog
+                .Include(r => r.Details)
+                .Where(r => r.LineId == lineId)
+                .OrderByDescending(r => r.PrintedAt)
+                .Take(50)
                 .ToListAsync();
         }
     }

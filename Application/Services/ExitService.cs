@@ -90,6 +90,8 @@ namespace Application.Services
                 }).ToList()
             };
 
+            await _repository.MarkFolioAsProcessedInLogAsync(dto.Folio);
+
             return await _repository.CreateExitAsync(exit);
         }
 
@@ -188,8 +190,10 @@ namespace Application.Services
             };
         }
 
-        public async Task<IEnumerable<ExitReportDto>> GetReportDataAsync(List<string> folios)
+        public async Task<IEnumerable<ExitReportDto>> GetReportDataAsync(int lineId,List<string> folios)
         {
+            await _repository.CreateReportLogAsync(lineId, folios);
+
             var entities = await _repository.GetEntriesByFoliosAsync(folios);
 
             return entities.Select(e => new ExitReportDto
@@ -199,6 +203,10 @@ namespace Application.Services
                 PartNumber = e.Details.FirstOrDefault()?.PartNumber ?? "",
                 Quantity = e.Details?.FirstOrDefault()?.Quantity ?? 0
             });
+        }
+        public async Task<IEnumerable<ExitReportLog>> GetReportLogsAsync(int lineId)
+        {
+            return await _repository.GetReportLogsAsync(lineId);
         }
     }
 }

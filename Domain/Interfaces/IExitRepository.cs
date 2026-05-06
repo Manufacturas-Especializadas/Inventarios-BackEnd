@@ -21,5 +21,11 @@ namespace Domain.Interfaces
         Task<EntryHeader?> GetEntryByFolioAsync(string Folio, int lineId);
 
         Task<IEnumerable<EntryHeader>> GetEntriesByFoliosAsync(List<string> folios);
+
+        Task<IEnumerable<ExitReportLog>> GetReportLogsAsync(int lineId);
+
+        Task<int> CreateReportLogAsync(int lineId, List<string> folios);
+
+        Task<bool> MarkFolioAsProcessedInLogAsync(string folio);
     }
 }
