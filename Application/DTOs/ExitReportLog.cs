@@ -11,7 +11,9 @@ namespace Application.DTOs
         public int Id { get; set; }
 
         public int LineId { get; set; }
- 
+
+        public DateTime PrintedAt { get; set; }
+
         public List<ExitReportLogDetail> Details { get; set; } = new List<ExitReportLogDetail>();
     }
 }
