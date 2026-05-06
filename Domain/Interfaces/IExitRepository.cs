@@ -21,5 +21,7 @@ namespace Domain.Interfaces
         Task<EntryHeader?> GetEntryByFolioAsync(string Folio, int lineId);
 
         Task<IEnumerable<EntryHeader>> GetEntriesByFoliosAsync(List<string> folios);
+
+        Task<int> CreateReportLogAsync(int lineId, List<string> folios);        
     }
 }
