@@ -166,5 +166,14 @@ namespace Infrastructure.Repositories
                 .Where(e => folios.Contains(e.Folio) || ids.Contains(e.Id))
                 .ToListAsync();
         }
+        public async Task<IEnumerable<ExitReportLog>> GetReportLogsAsync(int lineId)
+        {
+            return await _context.ExitReportLogs
+                .Include(r => r.Details)
+                .Where(r => r.LineId == lineId)
+                .OrderByDescending(r => r.PrintedAt)
+                .Take(50)
+                .ToListAsync();
+        }
     }
 }
