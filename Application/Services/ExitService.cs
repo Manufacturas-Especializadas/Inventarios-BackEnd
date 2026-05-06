@@ -188,7 +188,7 @@ namespace Application.Services
             };
         }
 
-        public async Task<IEnumerable<ExitReportDto>> GetReportDataAsync(List<string> folios)
+        public async Task<IEnumerable<ExitReportDto>> GetReportDataAsync(int lineId,List<string> folios)
         {
             var entities = await _repository.GetEntriesByFoliosAsync(folios);
 
