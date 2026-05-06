@@ -42,6 +42,30 @@ namespace Infrastructure.Repositories
                     .CountAsync();
         }
 
+        public async Task<int> GetMaxFolioSequenceTodayAsync(int lineId, DateTime date)
+        {
+            var entriesToday = await _context.EntryHeaders
+                .Where(e => e.LineId == lineId && e.CreatedAt.Date == date.Date)
+                .Select(e => e.Folio)
+                .ToListAsync();
+
+            if (!entriesToday.Any()) return 0;
+
+            int maxSequence = 0;
+            foreach (var folio in entriesToday)
+            {
+                if (int.TryParse(folio, out int currentSequence))
+                {
+                    if (currentSequence > maxSequence)
+                    {
+                        maxSequence = currentSequence;
+                    }
+                }
+            }
+
+            return maxSequence;
+        }
+
         public async Task<bool> DeleteEntryAsync(int id)
         {
             var entry = await _context.EntryHeaders
