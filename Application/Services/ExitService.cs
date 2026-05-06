@@ -190,6 +190,8 @@ namespace Application.Services
 
         public async Task<IEnumerable<ExitReportDto>> GetReportDataAsync(int lineId,List<string> folios)
         {
+            await _repository.CreateReportLogAsync(lineId, folios);
+
             var entities = await _repository.GetEntriesByFoliosAsync(folios);
 
             return entities.Select(e => new ExitReportDto
