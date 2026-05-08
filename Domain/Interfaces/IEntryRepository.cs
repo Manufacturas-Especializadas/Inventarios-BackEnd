@@ -21,6 +21,6 @@ namespace Domain.Interfaces
 
         Task<int> GetDailyEntriesCountAsync(int lineId, DateTime date);
 
-        Task<int> GetMaxFolioSequenceTodayAsync(int lineId, DateTime date);
+        Task<int> GetMaxFolioSequenceAsync(int lineId);
     }
 }
