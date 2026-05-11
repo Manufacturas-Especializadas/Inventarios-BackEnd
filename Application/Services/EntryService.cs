@@ -60,7 +60,7 @@ namespace Application.Services
 
         public async Task<string> RegisterEntryAsync(EntryCreateDto dto)
         {
-            if(dto.LineId == 11)
+            if (dto.LineId == 11)
             {
                 if (string.IsNullOrEmpty(dto.ShopOrder))
                     throw new Exception("El Shop Order es obligatorio para la Línea 12");
@@ -75,13 +75,11 @@ namespace Application.Services
 
             string generatedFolio = string.Empty;
 
-            if(dto.LineId == 11)
+            if (dto.LineId == 11)
             {
-                string dateString = nowInMexico.ToString("yyMMdd");
+                int maxSequence = await _repository.GetMaxFolioSequenceAsync(dto.LineId);
 
-                int countToday = await _repository.GetDailyEntriesCountAsync(dto.LineId, nowInMexico.Date);
-
-                string sequence = (countToday + 1).ToString("D5");
+                string sequence = (maxSequence + 1).ToString("D5");
 
                 generatedFolio = $"{sequence}";
             }
