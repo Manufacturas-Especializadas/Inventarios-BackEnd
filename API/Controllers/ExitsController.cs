@@ -76,20 +76,27 @@ namespace API.Controllers
         [Route("report-logs/{lineId}")]
         public async Task<IActionResult> GetReportLogs(int lineId)
         {
-            var logs = await _exitService.GetReportLogsAsync(lineId);
-
-            var result = logs.Select(log => new
+            try
             {
-                id = log.Id,
-                printedAt = log.PrintedAt,
-                details = log.Details.Select(d => new
-                {
-                    folio = d.Folio,
-                    isProcessed = d.IsProcessed
-                }).ToList()
-            });
+                var logs = await _exitService.GetReportLogsAsync(lineId);
 
-            return Ok(result);
+                var result = logs.Select(log => new
+                {
+                    id = log.Id,
+                    printedAt = log.PrintedAt,
+                    details = log.Details.Select(d => new
+                    {
+                        folio = d.Folio,
+                        isProcessed = d.IsProcessed
+                    }).ToList()
+                });
+
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost]
