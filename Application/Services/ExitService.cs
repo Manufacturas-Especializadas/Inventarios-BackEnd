@@ -95,7 +95,30 @@ namespace Application.Services
 
             await _repository.MarkFolioAsProcessedInLogAsync(dto.Folio);
 
-            return await _repository.CreateExitAsync(exit);
+            int exitId = await _repository.CreateExitAsync(exit);
+
+            if(dto.LineId == 11)
+            {
+                var mainPart = entryOriginal.Details.FirstOrDefault();
+                var totalQty = entryOriginal.Details.Sum(d => d.Quantity);
+
+                var ftnRecord = new FtnInventory
+                {
+                    ExitHeaderId = exitId,
+                    LineId = dto.LineId,
+                    Folio = dto.Folio,
+                    ShopOrder = exit.ShopOrder1,
+                    PartNumber = mainPart?.PartNumber ?? "N/A",
+                    OriginalQuantity = totalQty,
+                    CurrentQuantity = totalQty,
+                    Status = "EN_TRANSITO",
+                    CreatedAt = nowInMexico,
+                };
+
+                await _ftnRepository.CreateFtnRecordAsync(ftnRecord);
+            }
+
+            return exitId;
         }
 
         public async Task<bool> UpdateExitAsync(ExitUpdateDto dto)
