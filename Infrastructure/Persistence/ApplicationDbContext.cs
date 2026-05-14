@@ -26,6 +26,8 @@ namespace Infrastructure.Persistence
 
         public DbSet<ExitReportLogDetail> ExitReportLogDetails => Set<ExitReportLogDetail>();
 
+        public DbSet<FtnInventory> FtnInventories => Set<FtnInventory>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -102,6 +104,13 @@ namespace Infrastructure.Persistence
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.ScannedLabelId).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.ScannedAt).HasDefaultValueSql("GETDATE()");
+            });
+
+            modelBuilder.Entity<FtnInventory>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.Status).HasDefaultValue("EN_TRANSITO");
             });
         }
     }
