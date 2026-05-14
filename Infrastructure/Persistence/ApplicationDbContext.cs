@@ -26,7 +26,7 @@ namespace Infrastructure.Persistence
 
         public DbSet<ExitReportLogDetail> ExitReportLogDetails => Set<ExitReportLogDetail>();
 
-        public DbSet<FtnInventory> FtnInventories => Set<FtnInventory>();
+        public DbSet<FtnInventory> FtnInventory => Set<FtnInventory>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
