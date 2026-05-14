@@ -21,6 +21,7 @@ builder.Services.AddScoped<IBalanceQueries, BalanceQueries>();
 builder.Services.AddScoped<IExcelReportService, ExcelReportService>();
 builder.Services.AddScoped<IShippingService, ShippingService>();
 builder.Services.AddScoped<IFtnInventoryRepository, FtnInventoryRepository>();
+builder.Services.AddScoped<IExcelReaderService, ClosedXmlExcelReaderService>();
 
 //Services
 builder.Services.AddScoped<EntryService>();
