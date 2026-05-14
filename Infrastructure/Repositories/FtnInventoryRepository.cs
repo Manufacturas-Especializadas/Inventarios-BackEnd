@@ -19,6 +19,14 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<FtnInventory>> GetAllFtnRecordsByLineAsync(int lineId)
+        {
+            return await _context.FtnInventory
+                .Where(f => f.LineId == lineId)
+                .OrderByDescending(f => f.CreatedAt)
+                .ToListAsync();
+        }
+
         public async Task CreateFtnRecordAsync(FtnInventory ftnRecord)
         {
             await _context.FtnInventory.AddAsync(ftnRecord);

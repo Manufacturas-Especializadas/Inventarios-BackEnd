@@ -14,5 +14,7 @@ namespace Domain.Interfaces
         Task<IEnumerable<FtnInventory>> GetActiveFtnRecordsByLineAsync(int lineId);
 
         Task BulkUpdateFtnRecordsAsync(IEnumerable<FtnInventory> ftnRecords);
+
+        Task<IEnumerable<FtnInventory>> GetAllFtnRecordsByLineAsync(int lineId);
     }
 }
