@@ -28,6 +28,8 @@ namespace Domain.Entities
 
         public DateTime CreatedAt { get; set; }
 
+        public DateTime? ClearedAt { get; set; }
+
         public virtual ExitHeader? ExitHeader { get; set; }
 
         public virtual ProductionLine? ProductionLine { get; set; }
