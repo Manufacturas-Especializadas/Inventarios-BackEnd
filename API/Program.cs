@@ -20,12 +20,15 @@ builder.Services.AddScoped<IMovementQueries, MovementQueries>();
 builder.Services.AddScoped<IBalanceQueries, BalanceQueries>();
 builder.Services.AddScoped<IExcelReportService, ExcelReportService>();
 builder.Services.AddScoped<IShippingService, ShippingService>();
+builder.Services.AddScoped<IFtnInventoryRepository, FtnInventoryRepository>();
+builder.Services.AddScoped<IExcelReaderService, ClosedXmlExcelReaderService>();
 
 //Services
 builder.Services.AddScoped<EntryService>();
 builder.Services.AddScoped<ExitService>();
 builder.Services.AddScoped<MovementService>();
 builder.Services.AddScoped<BalanceService>();
+builder.Services.AddScoped<FtnReconciliationService>();
 
 var connection = builder.Configuration.GetConnectionString("Connection");
 builder.Services.AddDbContext<ApplicationDbContext>(option =>

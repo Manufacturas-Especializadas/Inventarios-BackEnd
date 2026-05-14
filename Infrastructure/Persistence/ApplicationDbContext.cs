@@ -26,6 +26,8 @@ namespace Infrastructure.Persistence
 
         public DbSet<ExitReportLogDetail> ExitReportLogDetails => Set<ExitReportLogDetail>();
 
+        public DbSet<FtnInventory> FtnInventory => Set<FtnInventory>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -102,6 +104,28 @@ namespace Infrastructure.Persistence
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.ScannedLabelId).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.ScannedAt).HasDefaultValueSql("GETDATE()");
+            });
+
+            modelBuilder.Entity<FtnInventory>(entity =>
+            {
+                entity.ToTable("FtnInventory");
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.LineId).HasColumnName("lineId");
+                entity.Property(e => e.ExitHeaderId).HasColumnName("exitHeaderId");
+                entity.Property(e => e.Status).HasDefaultValue("EN_TRANSITO");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+
+                entity.HasOne(d => d.ProductionLine)
+                    .WithMany()
+                    .HasForeignKey(d => d.LineId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(d => d.ExitHeader)
+                    .WithMany()
+                    .HasForeignKey(d => d.ExitHeaderId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

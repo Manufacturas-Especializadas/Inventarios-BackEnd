@@ -1,0 +1,20 @@
+﻿using Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Domain.Interfaces
+{
+    public interface IFtnInventoryRepository
+    {
+        Task CreateFtnRecordAsync(FtnInventory ftnRecord);
+
+        Task<IEnumerable<FtnInventory>> GetActiveFtnRecordsByLineAsync(int lineId);
+
+        Task BulkUpdateFtnRecordsAsync(IEnumerable<FtnInventory> ftnRecords);
+
+        Task<IEnumerable<FtnInventory>> GetAllFtnRecordsByLineAsync(int lineId);
+    }
+}
