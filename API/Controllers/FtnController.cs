@@ -26,7 +26,7 @@ namespace API.Controllers
         [Route("balance/{lineId}")]
         public async Task<IActionResult> GetFtnBalance(int lineId)
         {
-            var records = await _ftnRepository.GetActiveFtnRecordsByLineAsync(lineId);
+            var records = await _ftnRepository.GetAllFtnRecordsByLineAsync(lineId);
 
             return Ok(records);
         }
