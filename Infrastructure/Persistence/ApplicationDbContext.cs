@@ -108,9 +108,24 @@ namespace Infrastructure.Persistence
 
             modelBuilder.Entity<FtnInventory>(entity =>
             {
+                entity.ToTable("FtnInventory");
+
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+
+                entity.Property(e => e.LineId).HasColumnName("lineId");
+                entity.Property(e => e.ExitHeaderId).HasColumnName("exitHeaderId");
                 entity.Property(e => e.Status).HasDefaultValue("EN_TRANSITO");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+
+                entity.HasOne(d => d.ProductionLine)
+                    .WithMany()
+                    .HasForeignKey(d => d.LineId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(d => d.ExitHeader)
+                    .WithMany()
+                    .HasForeignKey(d => d.ExitHeaderId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }
