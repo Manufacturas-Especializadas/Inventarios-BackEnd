@@ -13,10 +13,13 @@ namespace Application.Services
     public class ExitService
     {
         private readonly IExitRepository _repository;
+        private readonly IFtnInventoryRepository _ftnRepository;
 
-        public ExitService(IExitRepository repository)
+        public ExitService(IExitRepository repository, 
+            IFtnInventoryRepository ftnRepository)
         {
             _repository = repository;
+            _ftnRepository = ftnRepository;
         }
 
         public async Task<int> RegisterExitAsync(ExitCreateDto dto)
