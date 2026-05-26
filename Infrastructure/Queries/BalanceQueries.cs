@@ -13,6 +13,11 @@ namespace Infrastructure.Queries
 
         public async Task<List<PartBalanceDto>> GetLineBalancesAsync(int lineId, DateTime? startDate = null, DateTime? endDate = null)
         {
+            if (startDate.HasValue && !endDate.HasValue)
+            {
+                endDate = startDate;
+            }
+
             var entriesQuery = _context.EntryDetails
                 .Where(d => d.EntryHeader.LineId == lineId)
                 .AsQueryable();
