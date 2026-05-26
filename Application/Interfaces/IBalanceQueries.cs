@@ -9,6 +9,6 @@ namespace Application.Interfaces
 {
     public interface IBalanceQueries
     {
-        Task<List<PartBalanceDto>> GetLineBalancesAsync(int lineId);
+        Task<List<PartBalanceDto>> GetLineBalancesAsync(int lineId, DateTime? startDate, DateTime? endDate);
     }
 }

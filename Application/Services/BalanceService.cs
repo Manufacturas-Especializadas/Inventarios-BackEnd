@@ -14,9 +14,9 @@ namespace Application.Services
 
         public BalanceService(IBalanceQueries queries) => _queries = queries;
 
-        public async Task<List<PartBalanceDto>> GetLineBalancesAsync(int lineId)
+        public async Task<List<PartBalanceDto>> GetLineBalancesAsync(int lineId, DateTime? startDate = null, DateTime? endDate = null)
         {
-            return await _queries.GetLineBalancesAsync(lineId);
+            return await _queries.GetLineBalancesAsync(lineId, startDate, endDate);
         }
     }
 }

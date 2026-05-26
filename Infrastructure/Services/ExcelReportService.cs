@@ -6,7 +6,8 @@ namespace Infrastructure.Services
 {
     public class ExcelReportService : IExcelReportService
     {
-        public byte[] GenerateBalanceReport(List<PartBalanceDto> balances, string lineName)
+        public byte[] GenerateBalanceReport(List<PartBalanceDto> balances, string lineName, 
+            DateTime? startDate = null, DateTime? endDate = null)
         {
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add($"Reporte {lineName}");
@@ -14,7 +15,18 @@ namespace Infrastructure.Services
             bool isL12 = lineName.Contains("12");
 
             worksheet.Cell("A1").Value = $"Balance de Inventario - {lineName}";
-            worksheet.Cell("A2").Value = $"Fecha de generación: {DateTime.Now:dd/MM/yyyy HH:mm}";
+            string dateRangeText = $"Fecha de generación: {DateTime.Now:dd/MM/yyyy HH:mm}";
+
+            if(startDate.HasValue && endDate.HasValue)
+            {
+                dateRangeText += $" | Periodo: {startDate.Value:dd/MM/yyyy} al {endDate.Value:dd/MM/yyyy}";
+            }
+            else if (startDate.HasValue)
+            {
+                dateRangeText += $"  | A partir de: {startDate.Value:dd/MM/yyyy}";
+            }
+
+            worksheet.Cell("A2").Value = dateRangeText;
 
             List<string> headersList = new() { "No. Parte" };
 

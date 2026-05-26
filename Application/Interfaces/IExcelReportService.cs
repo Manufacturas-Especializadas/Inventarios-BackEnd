@@ -9,6 +9,6 @@ namespace Application.Interfaces
 {
     public interface IExcelReportService
     {
-        byte[] GenerateBalanceReport(List<PartBalanceDto> balances, string lineName);
+        byte[] GenerateBalanceReport(List<PartBalanceDto> balances, string lineName, DateTime? startDate = null, DateTime? endDate = null);
     }
 }

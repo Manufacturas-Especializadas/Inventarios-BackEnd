@@ -11,72 +11,102 @@ namespace Infrastructure.Queries
 
         public BalanceQueries(ApplicationDbContext context) => _context = context;
 
-        public async Task<List<PartBalanceDto>> GetLineBalancesAsync(int lineId)
+        public async Task<List<PartBalanceDto>> GetLineBalancesAsync(int lineId, DateTime? startDate = null, DateTime? endDate = null)
         {
-            var entriesRaw = await _context.EntryDetails
-                        .Where(d => d.EntryHeader.LineId == lineId)
-                        .Select(d => new {
-                            d.PartNumber,
-                            d.Client,
-                            d.Quantity,
-                            d.BoxesQuantity,
-                            d.EntryHeader.CreatedAt,
-                            d.EntryHeader.ShopOrder,
-                            d.EntryHeader.Folio
-                        }).ToListAsync();
+            var entriesQuery = _context.EntryDetails
+                .Where(d => d.EntryHeader.LineId == lineId)
+                .AsQueryable();
+
+            if (startDate.HasValue)
+            {
+                entriesQuery = entriesQuery.Where(d => d.EntryHeader.CreatedAt >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                var endOfDay = endDate.Value.Date.AddDays(1).AddTicks(-1);
+                entriesQuery = entriesQuery.Where(d => d.EntryHeader.CreatedAt <= endOfDay);
+            }
+
+            var entriesRaw = await entriesQuery
+                .Select(d => new {
+                    d.PartNumber,
+                    d.Client,
+                    d.Quantity,
+                    d.BoxesQuantity,
+                    d.EntryHeader.CreatedAt,
+                    d.EntryHeader.ShopOrder,
+                    d.EntryHeader.Folio
+                }).ToListAsync();
 
             var entriesSummary = entriesRaw
-                        .GroupBy(d => new { d.PartNumber, d.Client })
-                        .Select(g => {
-                            var entrySOs = g.Select(x => x.ShopOrder)
-                                            .Where(so => !string.IsNullOrWhiteSpace(so))
-                                            .Distinct();
+                .GroupBy(d => new { d.PartNumber, d.Client })
+                .Select(g => {
+                    var entrySOs = g.Select(x => x.ShopOrder)
+                                    .Where(so => !string.IsNullOrWhiteSpace(so))
+                                    .Distinct();
 
-                            var entryFolios = g.Select(x => x.Folio)
-                                             .Where(f => !string.IsNullOrWhiteSpace(f))
-                                             .Distinct();
+                    var entryFolios = g.Select(x => x.Folio)
+                                     .Where(f => !string.IsNullOrWhiteSpace(f))
+                                     .Distinct();
 
-                            return new
-                            {
-                                PartNumber = g.Key.PartNumber,
-                                Client = g.Key.Client,
-                                TotalEntries = g.Sum(x => x.Quantity),
-                                TotalBoxes = g.Sum(x => x.BoxesQuantity ?? 0),
-                                LastEntryDate = g.Max(x => x.CreatedAt),
-                                EntryShopOrders = string.Join(", ", entrySOs),
-                                Folio = string.Join(", ", entryFolios)
-                            };
-                        }).ToList();
+                    return new
+                    {
+                        PartNumber = g.Key.PartNumber,
+                        Client = g.Key.Client,
+                        TotalEntries = g.Sum(x => x.Quantity),
+                        TotalBoxes = g.Sum(x => x.BoxesQuantity ?? 0),
+                        LastEntryDate = g.Max(x => x.CreatedAt),
+                        EntryShopOrders = string.Join(", ", entrySOs),
+                        Folio = string.Join(", ", entryFolios)
+                    };
+                }).ToList();
 
-            var exitsRaw = await _context.ExitDetails
-                        .Where(d => d.ExitHeader.LineId == lineId)
-                        .Select(d => new {
-                            d.PartNumber,
-                            d.Quantity,
-                            d.ExitHeader.CreatedAt,
-                            d.ExitHeader.ShopOrder1,
-                            d.ExitHeader.ShopOrder2,
-                            d.ExitHeader.ShopOrder3,
-                            d.ExitHeader.ShopOrder4,
-                            d.ExitHeader.ShopOrder5,
-                            d.ExitHeader.ShopOrder6
-                        }).ToListAsync();
+
+            var exitsQuery = _context.ExitDetails
+                .Where(d => d.ExitHeader.LineId == lineId)
+                .AsQueryable();
+
+            if (startDate.HasValue)
+            {
+                exitsQuery = exitsQuery.Where(d => d.ExitHeader.CreatedAt >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                var endOfDay = endDate.Value.Date.AddDays(1).AddTicks(-1);
+                exitsQuery = exitsQuery.Where(d => d.ExitHeader.CreatedAt <= endOfDay);
+            }
+
+            var exitsRaw = await exitsQuery
+                .Select(d => new {
+                    d.PartNumber,
+                    d.Quantity,
+                    d.ExitHeader.CreatedAt,
+                    d.ExitHeader.ShopOrder1,
+                    d.ExitHeader.ShopOrder2,
+                    d.ExitHeader.ShopOrder3,
+                    d.ExitHeader.ShopOrder4,
+                    d.ExitHeader.ShopOrder5,
+                    d.ExitHeader.ShopOrder6
+                }).ToListAsync();
 
             var exitsSummary = exitsRaw
-                        .GroupBy(d => d.PartNumber)
-                        .Select(g => {
-                            var allSOs = g.SelectMany(x => new[] { x.ShopOrder1, x.ShopOrder2, x.ShopOrder3, x.ShopOrder4, x.ShopOrder5, x.ShopOrder6 })
-                                          .Where(so => !string.IsNullOrWhiteSpace(so))
-                                          .Distinct();
+                .GroupBy(d => d.PartNumber)
+                .Select(g => {
+                    var allSOs = g.SelectMany(x => new[] { x.ShopOrder1, x.ShopOrder2, x.ShopOrder3, x.ShopOrder4, x.ShopOrder5, x.ShopOrder6 })
+                                  .Where(so => !string.IsNullOrWhiteSpace(so))
+                                  .Distinct();
 
-                            return new
-                            {
-                                PartNumber = g.Key,
-                                TotalExits = g.Sum(x => x.Quantity ?? 0),
-                                LastExitDate = g.Max(x => x.CreatedAt),
-                                ExitShopOrders = string.Join(", ", allSOs)
-                            };
-                        }).ToList();
+                    return new
+                    {
+                        PartNumber = g.Key,
+                        TotalExits = g.Sum(x => x.Quantity ?? 0),
+                        LastExitDate = g.Max(x => x.CreatedAt),
+                        ExitShopOrders = string.Join(", ", allSOs)
+                    };
+                }).ToList();
+
 
             var balances = entriesSummary.Select(e =>
             {

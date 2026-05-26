@@ -45,11 +45,15 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("export/line/{lineId}")]
-        public async Task<IActionResult> ExportToExcel(int lineId, [FromQuery] string lineName = "")
+        public async Task<IActionResult> ExportToExcel(
+            int lineId,
+            [FromQuery] string lineName = "",
+            [FromQuery] DateTime? startDate = null,
+            [FromQuery] DateTime? endDate = null)
         {
             try
             {
-                var balances = await _balanceService.GetLineBalancesAsync(lineId);
+                var balances = await _balanceService.GetLineBalancesAsync(lineId, startDate, endDate);
 
                 if (balances == null || !balances.Any())
                 {
@@ -59,8 +63,8 @@ namespace API.Controllers
                 string finalLineName = string.IsNullOrWhiteSpace(lineName)
                     ? $"LINEA {lineId}"
                     : lineName;
-
-                var excelBytes = _excelService.GenerateBalanceReport(balances, finalLineName);
+               
+                var excelBytes = _excelService.GenerateBalanceReport(balances, finalLineName, startDate, endDate);
 
                 string safeFileName = finalLineName.Replace(" ", "_");
 
