@@ -16,6 +16,16 @@ namespace Domain.Entities
 
         public string? ShopOrder { get; set; }
 
+        public string? ShopOrder2 { get; set; }
+
+        public string? ShopOrder3 { get; set; }
+
+        public string? ShopOrder4 { get; set; }
+
+        public string? ShopOrder5 { get; set; }
+
+        public string? ShopOrder6 { get; set; }
+
         public string? Folio { get; set; }
 
         public List<EntryDetail> Details { get; set; } = new();

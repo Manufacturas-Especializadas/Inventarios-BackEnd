@@ -12,6 +12,16 @@ namespace Application.DTOs
 
         public string? ShopOrder { get; set; }
 
+        public string? ShopOrder2 { get; set; }
+
+        public string? ShopOrder3 { get; set; }
+
+        public string? ShopOrder4 { get; set; }
+
+        public string? ShopOrder5 { get; set; }
+
+        public string? ShopOrder6 { get; set; }
+
         public List<EntryDetailDto> Details { get; set; } = new();
     }
 
