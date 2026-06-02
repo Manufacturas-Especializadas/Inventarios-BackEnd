@@ -77,6 +77,14 @@ namespace Application.Services
                 }
             }
 
+            if(dto.LineId == 3)
+            {
+                if (string.IsNullOrEmpty(dto.ShopOrder))
+                {
+                    throw new Exception("La Shop Order es obligatoria para la Linea 3");
+                }
+            }
+
             TimeZoneInfo mexicoTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
 
             DateTime nowInMexico = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mexicoTimeZone);
