@@ -69,6 +69,14 @@ namespace Application.Services
                     throw new Exception("La cantidad de cajas es obligatoria para la Línea 12");
             }
 
+            if(dto.LineId == 4)
+            {
+                if (string.IsNullOrEmpty(dto.ShopOrder))
+                {
+                    throw new Exception("La Shop Order es obligatorio para la Linea 4");
+                }
+            }
+
             TimeZoneInfo mexicoTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
 
             DateTime nowInMexico = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mexicoTimeZone);
@@ -88,6 +96,11 @@ namespace Application.Services
             {
                 LineId = dto.LineId,
                 ShopOrder = dto.ShopOrder,
+                ShopOrder2 = dto.ShopOrder2,
+                ShopOrder3 = dto.ShopOrder3,
+                ShopOrder4 = dto.ShopOrder4,
+                ShopOrder5 = dto.ShopOrder5,
+                ShopOrder6 = dto.ShopOrder6,
                 Folio = generatedFolio,
                 CreatedAt = nowInMexico,
                 Details = dto.Details.Select(d => new EntryDetail
