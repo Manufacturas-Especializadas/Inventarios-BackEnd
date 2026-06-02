@@ -41,6 +41,26 @@ namespace Infrastructure.Persistence
                         .HasMaxLength(50)
                         .IsRequired(false);
 
+                entity.Property(e => e.ShopOrder2)
+                        .HasMaxLength(50)
+                        .IsRequired(false);
+
+                entity.Property(e => e.ShopOrder3)
+                        .HasMaxLength(50)
+                        .IsRequired(false);
+
+                entity.Property(e => e.ShopOrder4)
+                        .HasMaxLength(50)
+                        .IsRequired(false);
+
+                entity.Property(e => e.ShopOrder5)
+                        .HasMaxLength(50)
+                        .IsRequired(false);
+
+                entity.Property(e => e.ShopOrder6)
+                        .HasMaxLength(50)
+                        .IsRequired(false);
+
                 entity.HasMany(e => e.Details)
                       .WithOne(d => d.EntryHeader)
                       .HasForeignKey(d => d.EntryHeaderId)
