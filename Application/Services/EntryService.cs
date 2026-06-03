@@ -85,6 +85,22 @@ namespace Application.Services
                 }
             }
 
+            if (dto.LineId == 7)
+            {
+                if (string.IsNullOrEmpty(dto.ShopOrder))
+                {
+                    throw new Exception("La Shop Order es obligatoria para la Linea 8");
+                }
+            }
+
+            if (dto.LineId == 8)
+            {
+                if (string.IsNullOrEmpty(dto.ShopOrder))
+                {
+                    throw new Exception("La Shop Order es obligatoria para la Linea 9");
+                }
+            }
+
             TimeZoneInfo mexicoTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
 
             DateTime nowInMexico = TimeZoneInfo.ConvertTime(DateTime.UtcNow, mexicoTimeZone);
