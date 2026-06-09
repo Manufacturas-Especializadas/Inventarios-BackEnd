@@ -28,6 +28,8 @@ namespace Infrastructure.Persistence
 
         public DbSet<FtnInventory> FtnInventory => Set<FtnInventory>();
 
+        public DbSet<MicrochannelInventory> MicrochannelInventories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -147,6 +149,23 @@ namespace Infrastructure.Persistence
                     .HasForeignKey(d => d.ExitHeaderId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<MicrochannelInventory>(entity =>
+            {
+                entity.ToTable("MicrochannelInventory");
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Company).HasColumnName("company").HasDefaultValue("Manufacturas Especializadas");
+                entity.Property(e => e.Area).HasColumnName("area").HasDefaultValue("SEPARADOR");
+                entity.Property(e => e.Description).HasColumnName("description").HasDefaultValue("SEPARADOR AZUL MICROCHANNEL");
+                entity.Property(e => e.Line).HasColumnName("line").HasDefaultValue("Linea 6");
+                entity.Property(e => e.Code).HasColumnName("code").IsRequired();
+
+                entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(20);
+                entity.Property(e => e.EntryDate).HasColumnName("entryDate");
+                entity.Property(e => e.ExitDate).HasColumnName("exitDate");
+                entity.Property(e => e.CreatedAt).HasColumnName("createdAt").HasDefaultValueSql("GETDATE()");
+            });
         }
-    }
+    }    
 }
