@@ -22,6 +22,7 @@ builder.Services.AddScoped<IExcelReportService, ExcelReportService>();
 builder.Services.AddScoped<IShippingService, ShippingService>();
 builder.Services.AddScoped<IFtnInventoryRepository, FtnInventoryRepository>();
 builder.Services.AddScoped<IExcelReaderService, ClosedXmlExcelReaderService>();
+builder.Services.AddScoped<IMicrochannelRepository, MicrochannelRepository>();
 
 //Services
 builder.Services.AddScoped<EntryService>();
@@ -29,6 +30,7 @@ builder.Services.AddScoped<ExitService>();
 builder.Services.AddScoped<MovementService>();
 builder.Services.AddScoped<BalanceService>();
 builder.Services.AddScoped<FtnReconciliationService>();
+builder.Services.AddScoped<MicrochannelService>();
 
 var connection = builder.Configuration.GetConnectionString("Connection");
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
