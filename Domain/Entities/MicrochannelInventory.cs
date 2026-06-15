@@ -6,9 +6,9 @@
 
         public string Company { get; set; } = "Manufacturas Especializadas";
 
-        public string Area { get; set; } = "SEPARADOR";
+        public string Area { get; set; } = "CONTENEDOR";
 
-        public string Description { get; set; } = "SEPARADOR AZUL MICROCHANNEL";
+        public string Description { get; set; } = "CONTENEDOR MICROCHANNEL";
 
         public string Line { get; set; } = "Linea 6";
 
