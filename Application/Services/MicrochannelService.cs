@@ -22,6 +22,17 @@ namespace Application.Services
             string sanitizedCode = dto.Code.Replace("'", "-").Trim().ToUpper();
             string type = dto.TypeMovement.ToUpper();
 
+            string containerDescription = "CONTENEDOR DESCONOCIDO";
+
+            if (sanitizedCode.StartsWith("CONT-"))
+            {
+                containerDescription = "CONTENEDOR MICROCHANNEL";
+            }
+            else if (sanitizedCode.StartsWith("CTNA-"))
+            {
+                containerDescription = "CONTENEDOR NARANJA";
+            }
+
             var openCycle = await _repository.GetOpenCycleAsync(sanitizedCode);
 
             if (type == "ENTRADA")
@@ -33,7 +44,8 @@ namespace Application.Services
                 {
                     Code = sanitizedCode,
                     EntryDate = nowInMexico,
-                    Status = "EN MESA"
+                    Status = "EN MESA",
+                    Description = containerDescription
                 };
 
                 return await _repository.AddMovementAsync(newMovement);
@@ -45,6 +57,7 @@ namespace Application.Services
 
                 openCycle.ExitDate = nowInMexico;
                 openCycle.Status = "FUERA DE MESA";
+                openCycle.Description = containerDescription;
 
                 await _repository.UpdateMovementAsync(openCycle);
 
