@@ -32,8 +32,12 @@ namespace Application.Services
             {
                 containerDescription = "CONTENEDOR NARANJA";
             }
+            else if (sanitizedCode.StartsWith("CTAZ-"))
+            {
+                containerDescription = "CONTENEDOR AZUL";
+            }
 
-            var openCycle = await _repository.GetOpenCycleAsync(sanitizedCode);
+                var openCycle = await _repository.GetOpenCycleAsync(sanitizedCode);
 
             if (type == "ENTRADA")
             {
