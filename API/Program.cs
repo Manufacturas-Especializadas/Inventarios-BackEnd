@@ -1,3 +1,4 @@
+using Application.DTOs;
 using Application.Interfaces;
 using Application.Services;
 using Domain.Interfaces;
@@ -14,6 +15,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
 //Repositories
 builder.Services.AddScoped<IEntryRepository, EntryRepository>();
 builder.Services.AddScoped<IExitRepository, ExitRepository>();
@@ -26,6 +29,7 @@ builder.Services.AddScoped<IExcelReaderService, ClosedXmlExcelReaderService>();
 builder.Services.AddScoped<IMicrochannelRepository, MicrochannelRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+builder.Services.AddScoped<MetricsReportService>();
 builder.Services.AddHostedService<DailyMetricsJob>();
 
 //Services
