@@ -63,6 +63,7 @@ namespace Application.Services
                 openCycle.ExitDate = nowInMexico;
                 openCycle.Status = "FUERA DE MESA";
                 openCycle.Description = containerDescription;
+                openCycle.tripNumber = dto.TripNumber;
 
                 await _repository.UpdateMovementAsync(openCycle);
 
