@@ -9,10 +9,12 @@ namespace API.Controllers
     public class MicrochannelController : ControllerBase
     {
         private readonly MicrochannelService _microchannelService;
+        private readonly MetricsReportService _reportService;
 
-        public MicrochannelController(MicrochannelService microchannelService)
+        public MicrochannelController(MicrochannelService microchannelService, MetricsReportService reportService)
         {
             _microchannelService = microchannelService;
+            _reportService = reportService;
         }
 
         [HttpGet]
@@ -62,6 +64,21 @@ namespace API.Controllers
                 {
                     Message = ex.Message,
                 });
+            }
+        }
+
+        [HttpPost("trigger-daily-report")]
+        public async Task<IActionResult> TriggerReport()
+        {
+            try
+            {
+                await _reportService.GenerateAndSendDailyReportAsync();
+
+                return Ok(new { message = "Reporte diario forzado y enviado con éxito por correo." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = $"Error al forzar el reporte: {ex.Message}" });
             }
         }
     }
