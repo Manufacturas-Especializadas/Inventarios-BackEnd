@@ -5,5 +5,7 @@
         public string Code { get; set; }
 
         public string TypeMovement { get; set; }
+
+        public int? TripNumber { get; set; }
     }
 }
