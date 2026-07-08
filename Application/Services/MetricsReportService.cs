@@ -87,8 +87,10 @@ namespace Application.Services
 
             var emails = new List<string>()
             {
-                "jose.lugo@mesa.ms",
-                "saul.rodriguez@mesa.ms"
+                "sebastian.gamez@mesa.ms",
+                "anwar.delosmonteros@mesa.ms",
+                "rolando.montelongo@mesa.ms",
+                "jose.lugo@mesa.ms"
             };
 
             await _emailService.SendGlobalNotificationAsync(
