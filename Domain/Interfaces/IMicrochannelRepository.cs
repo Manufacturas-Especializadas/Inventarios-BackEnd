@@ -4,6 +4,8 @@ namespace Domain.Interfaces
 {
     public interface IMicrochannelRepository
     {
+        Task<List<MicrochannelInventory>> GetAllAsync();
+
         Task<List<MicrochannelInventory>> GetRecentMovementAsync();
 
         Task<MicrochannelInventory?> GetOpenCycleAsync(string code);
