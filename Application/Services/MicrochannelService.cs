@@ -9,7 +9,7 @@ namespace Application.Services
         private readonly IMicrochannelRepository _repository;
 
         public MicrochannelService(IMicrochannelRepository repository) => _repository = repository;
-
+        
 
         public async Task<MicrochannelInventory> RegisterMovementAsync(MicrochannelCreateDto dto)
         {
@@ -49,7 +49,8 @@ namespace Application.Services
                     Code = sanitizedCode,
                     EntryDate = nowInMexico,
                     Status = "EN MESA",
-                    Description = containerDescription
+                    Description = containerDescription,
+                    tripNumber = null
                 };
 
                 return await _repository.AddMovementAsync(newMovement);
