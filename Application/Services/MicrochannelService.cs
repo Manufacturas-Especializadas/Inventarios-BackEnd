@@ -50,7 +50,7 @@ namespace Application.Services
                     EntryDate = nowInMexico,
                     Status = "EN MESA",
                     Description = containerDescription,
-                    tripNumber = null
+                    TripNumber = null
                 };
 
                 return await _repository.AddMovementAsync(newMovement);
@@ -63,7 +63,7 @@ namespace Application.Services
                 openCycle.ExitDate = nowInMexico;
                 openCycle.Status = "FUERA DE MESA";
                 openCycle.Description = containerDescription;
-                openCycle.tripNumber = dto.TripNumber;
+                openCycle.TripNumber = dto.TripNumber;
 
                 await _repository.UpdateMovementAsync(openCycle);
 
