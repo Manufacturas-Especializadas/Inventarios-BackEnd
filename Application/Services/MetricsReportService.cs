@@ -55,7 +55,7 @@ namespace Application.Services
                         </tr>
                         
                         <tr style='border-bottom: 1px solid #cbd5e1;'>
-                            <td style='padding: 12px; font-weight: bold; color: #475569;'>Grises Microchannel</td>
+                            <td style='padding: 12px; font-weight: bold; color: #475569;'>Grises</td>
                             <td style='padding: 12px; text-align: right; font-weight: bold; color: #10b981;'>{graysIn}</td>
                             <td style='padding: 12px; text-align: right; font-weight: bold; color: #f97316;'>{graysOut}</td>
                             <td style='padding: 12px; text-align: right; font-weight: bold; color: #64748b;'>{graysTotal}</td>
