@@ -1,6 +1,7 @@
 using Application.Interfaces;
 using Application.Services;
 using Domain.Interfaces;
+using Infrastructure.Job;
 using Infrastructure.Persistence;
 using Infrastructure.Queries;
 using Infrastructure.Repositories;
@@ -23,6 +24,9 @@ builder.Services.AddScoped<IShippingService, ShippingService>();
 builder.Services.AddScoped<IFtnInventoryRepository, FtnInventoryRepository>();
 builder.Services.AddScoped<IExcelReaderService, ClosedXmlExcelReaderService>();
 builder.Services.AddScoped<IMicrochannelRepository, MicrochannelRepository>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+builder.Services.AddHostedService<DailyMetricsJob>();
 
 //Services
 builder.Services.AddScoped<EntryService>();
