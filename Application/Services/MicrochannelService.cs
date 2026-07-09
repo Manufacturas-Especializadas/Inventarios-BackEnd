@@ -34,7 +34,7 @@ namespace Application.Services
             else if (sanitizedCode.StartsWith("CTNA-"))
             {
                 containerDescription = "CONTENEDOR NARANJA";
-                assignedClient = "Carrier A, B y E";
+                assignedClient = "Carrier A, B y E MicroChannel 2024";
             }
             else if (sanitizedCode.StartsWith("CTAZ-"))
             {
