@@ -83,6 +83,35 @@ namespace Application.Services
             }
         }
 
+        public async Task<bool> DesactivateContainerAsync(MicrochannelDeactivateDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Code))
+                throw new Exception("El código no puede estar vacio");
+
+            if (string.IsNullOrEmpty(dto.Reason))
+                throw new Exception("Debe proporcionar un motivo para la baja");
+
+            string sanitazedCode = dto.Code.Replace("'", "-").Trim().ToUpper();
+
+            var containerHistory = await _repository.GetAllByCodeAsync(sanitazedCode);
+
+            if (containerHistory == null || !containerHistory.Any())
+                throw new Exception($"No se encontró ningún registro para el contenedor {sanitazedCode}");
+
+            if (containerHistory.All(c => !c.IsActive))
+                throw new Exception($"El contenedor {sanitazedCode} ya se encontraba dado de baja");
+
+            foreach (var record in containerHistory)
+            {
+                record.IsActive = false;
+                record.ReasonForDeactivation = dto.Reason.Trim().ToUpper();
+
+                await _repository.UpdateMovementAsync(record);
+            }
+
+            return true;
+        }
+
         public async Task<List<MicrochannelInventory>> GetRecentAsync()
         {
             return await _repository.GetRecentMovementAsync();
