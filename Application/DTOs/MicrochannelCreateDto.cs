@@ -7,5 +7,7 @@
         public string TypeMovement { get; set; }
 
         public int? TripNumber { get; set; }
+
+        public int? PayRollNumber { get; set; }
     }
 }

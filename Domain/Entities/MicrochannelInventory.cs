@@ -16,6 +16,8 @@
 
         public int? TripNumber { get; set; }
 
+        public int? PayRollNumber { get; set; }
+
         public string Status { get; set; } = "EN MESA";
 
         public DateTime? CreatedAt { get; set; }

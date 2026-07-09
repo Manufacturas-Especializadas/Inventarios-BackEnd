@@ -158,6 +158,7 @@ namespace Infrastructure.Persistence
                 entity.Property(e => e.Company).HasColumnName("company").HasDefaultValue("Manufacturas Especializadas");
                 entity.Property(e => e.Area).HasColumnName("area").HasDefaultValue("CONTENEDOR");
                 entity.Property(e => e.TripNumber).HasColumnName("tripNumber");
+                entity.Property(e => e.PayRollNumber).HasColumnName("payrollNumber");
                 entity.Property(e => e.Description).HasColumnName("description").HasDefaultValue("CONTENEDOR MICROCHANNEL");
                 entity.Property(e => e.Line).HasColumnName("line").HasDefaultValue("Linea 6");
                 entity.Property(e => e.Code).HasColumnName("code").IsRequired();
