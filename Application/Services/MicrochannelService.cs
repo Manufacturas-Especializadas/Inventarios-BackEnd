@@ -71,6 +71,7 @@ namespace Application.Services
                 openCycle.Description = containerDescription;
                 openCycle.TripNumber = dto.TripNumber;
                 openCycle.PayRollNumber = null;
+                openCycle.Client = assignedClient;
 
                 await _repository.UpdateMovementAsync(openCycle);
 
