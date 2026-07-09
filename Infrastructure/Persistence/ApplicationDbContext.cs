@@ -162,6 +162,9 @@ namespace Infrastructure.Persistence
                 entity.Property(e => e.Description).HasColumnName("description").HasDefaultValue("CONTENEDOR MICROCHANNEL");
                 entity.Property(e => e.Line).HasColumnName("line").HasDefaultValue("Linea 6");
                 entity.Property(e => e.Code).HasColumnName("code").IsRequired();
+                entity.Property(e => e.Client).HasColumnName("client").HasMaxLength(150);
+                entity.Property(e => e.ReasonForDeactivation).HasColumnName("reasonForDeactivation");
+                entity.Property(e => e.IsActive).HasColumnName("isActive").HasDefaultValue(true);
 
                 entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(20);
                 entity.Property(e => e.EntryDate).HasColumnName("entryDate");
