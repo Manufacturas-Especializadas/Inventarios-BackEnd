@@ -6,6 +6,8 @@ namespace Domain.Interfaces
     {
         Task<List<MicrochannelInventory>> GetAllAsync();
 
+        Task<List<MicrochannelInventory>> GetAllByCodeAsync(string code);
+
         Task<List<MicrochannelInventory>> GetRecentMovementAsync();
 
         Task<MicrochannelInventory?> GetOpenCycleAsync(string code);

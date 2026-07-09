@@ -21,6 +21,14 @@ namespace Infrastructure.Repositories
                         .ToListAsync();
         }
 
+        public async Task<List<MicrochannelInventory>> GetAllByCodeAsync(string code)
+        {
+            return await _context.MicrochannelInventories
+                        .AsNoTracking()   
+                        .Where(c => c.Code == code)
+                        .ToListAsync();
+        }
+
         public async Task<List<MicrochannelInventory>> GetRecentMovementAsync()
         {
             return await _context.MicrochannelInventories
