@@ -67,6 +67,35 @@ namespace API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("deactivate")]
+        public async Task<IActionResult> DeactivateContainer([FromBody] MicrochannelDeactivateDto dto)
+        {
+            try
+            {
+                if (dto == null)
+                    return BadRequest(new
+                    {
+                        Message = "Los datos para la baja no pueden ser nulos"
+                    });
+
+                var success = await _microchannelService.DesactivateContainerAsync(dto);
+
+                return Ok(new
+                {
+                    Message = $"El contenedor {dto.Code} fue dado de baja exitosamente.",
+                    Success = success
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Message = ex.Message,
+                });
+            }
+        }
+
         [HttpPost("trigger-daily-report")]
         public async Task<IActionResult> TriggerReport()
         {
