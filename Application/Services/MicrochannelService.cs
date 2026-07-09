@@ -22,19 +22,24 @@ namespace Application.Services
             string sanitizedCode = dto.Code.Replace("'", "-").Trim().ToUpper();
             string type = dto.TypeMovement.ToUpper();
 
+
             string containerDescription = "CONTENEDOR DESCONOCIDO";
+            string assignedClient = "CLIENTE DESCONCIDO";
 
             if (sanitizedCode.StartsWith("CONT-"))
             {
                 containerDescription = "CONTENEDOR MICROCHANNEL";
+                assignedClient = "MicroChannel";
             }
             else if (sanitizedCode.StartsWith("CTNA-"))
             {
                 containerDescription = "CONTENEDOR NARANJA";
+                assignedClient = "Carrier A, B y E";
             }
             else if (sanitizedCode.StartsWith("CTAZ-"))
             {
                 containerDescription = "CONTENEDOR AZUL";
+                assignedClient = "Lennox";
             }
 
                 var openCycle = await _repository.GetOpenCycleAsync(sanitizedCode);
