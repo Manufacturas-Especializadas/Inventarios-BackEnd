@@ -25,5 +25,11 @@
         public DateTime? EntryDate { get; set; }
 
         public DateTime? ExitDate { get; set; }
+
+        public string? Client { get; set; }
+
+        public string? ReasonForDeactivation { get; set; }
+
+        public bool IsActive { get; set; } = true;
     }
 }
