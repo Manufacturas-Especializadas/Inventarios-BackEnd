@@ -30,7 +30,11 @@ builder.Services.AddScoped<IMicrochannelRepository, MicrochannelRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<MetricsReportService>();
-builder.Services.AddHostedService<DailyMetricsJob>();
+
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddHostedService<DailyMetricsJob>();
+}
 
 //Services
 builder.Services.AddScoped<EntryService>();
